@@ -1,0 +1,78 @@
+# This repository adheres to the publiccode.yml standard by including this 
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: '0.2'
+applicationSuite: e-procurement GT-SUAM
+categories:
+  - procurement
+dependsOn:
+  open:
+    - name: Java
+      optional: false
+      version: OpenJDK-11.0.12
+      versionMax: '11'
+      versionMin: '1.8'
+    - name: Postgresql
+      optional: false
+      version: ''
+      versionMax: '11'
+      versionMin: '9.6'
+    - name: Tomcat
+      optional: false
+      version: 9.0.54
+      versionMax: '9'
+      versionMin: '8'
+description:
+  it:
+    features:
+      - Elenco Bandi in corso e scaduti
+      - Dettaglio di un Bando
+      - Documenti di un Bando
+      - Dati Adempimenti L.190/2012
+      - Elenco Contratti
+      - Dettaglio di un Contratto
+      - Feed RSS di bandi, esiti e avvisi
+    genericName: e-procurement platform
+    longDescription: |
+      Il servizio espone i dati relativi ai bandi, esiti e avvisi in conformità alle specifiche del D.P.C.M. 26 aprile 2011 (Pubblicato nella Gazzetta Ufficiale del 1 agosto 2011, n. 177) “Pubblicazione nei siti informatici di atti e provvedimenti concernenti procedure ad evidenza pubblica o di bilanci, adottato ai sensi dell’articolo 32 della legge 18 giugno 2009, n. 69”.
+      Inoltre il servizio espone i dati inviati ad ANAC per la Legge 190/2012 per l’anticorruzione, ed i contratti per appalti affidati secondo il DLgs 50/2016.
+      Permette la generazione dei file XML dei feed RSS secondo lo standard del DPCM 26/04/2011.
+    shortDescription: Servizio di pubblicazione dei dati del PortaleAppalti DPCM 26/04/2011
+usedBy:
+  - Regione Marche
+developmentStatus: stable
+it:
+  conforme:
+    gdpr: false
+    lineeGuidaDesign: false
+    misureMinimeSicurezza: false
+    modelloInteroperabilita: false
+  countryExtensionVersion: '0.2'
+  piattaforme:
+    anpr: false
+    cie: false
+    pagopa: false
+    spid: false
+  riuso:
+    codiceIPA: r_marche
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: Maggioli S.p.A.
+  repoOwner: Regione Marche
+localisation:
+  availableLanguages:
+    - it
+  localisationReady: false
+maintenance:
+  contractors:
+    - name: MAGGIOLI SPA
+      until: '2021-12-31'
+      website: 'https://www.maggioli.com'
+  type: contract
+name: WSBandiEsitiAvvisi
+platforms:
+  - web
+releaseDate: '2021-10-15'
+softwareType: standalone/backend
+url: 'https://github.com/regione-marche/e-procurement-WSBandiEsitiAvvisi.git'

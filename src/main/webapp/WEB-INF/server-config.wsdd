@@ -1,0 +1,86 @@
+<ns1:deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns1="http://xml.apache.org/axis/wsdd/">
+ <ns1:globalConfiguration>
+  <ns1:parameter name="sendMultiRefs" value="true"/>
+  <ns1:parameter name="disablePrettyXML" value="true"/>
+  <ns1:parameter name="adminPassword" value="admin"/>
+  <ns1:parameter name="dotNetSoapEncFix" value="true"/>
+  <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
+  <ns1:parameter name="sendXMLDeclaration" value="true"/>
+  <ns1:parameter name="sendXsiTypes" value="true"/>
+  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <ns1:requestFlow>
+   <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
+    <ns1:parameter name="scope" value="session"/>
+   </ns1:handler>
+   <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
+    <ns1:parameter name="scope" value="request"/>
+    <ns1:parameter name="extension" value=".jwr"/>
+   </ns1:handler>
+  </ns1:requestFlow>
+ </ns1:globalConfiguration>
+ <ns1:handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+ <ns1:handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+ <ns1:handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
+ <ns1:service name="AdminService" provider="java:MSG">
+  <ns1:parameter name="allowedMethods" value="AdminService"/>
+  <ns1:parameter name="enableRemoteAdmin" value="false"/>
+  <ns1:parameter name="className" value="org.apache.axis.utils.Admin"/>
+  <ns1:namespace>http://xml.apache.org/axis/wsdd/</ns1:namespace>
+ </ns1:service>
+ <ns1:service name="WSBandiEsitiAvvisiSOAP" provider="java:RPC" style="wrapped" use="literal">
+  <ns1:parameter name="allowedMethods" value="*"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="wsdlPortType" value="WSBandiEsitiAvvisi"/>
+  <ns1:parameter name="className" value="it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.WSBandiEsitiAvvisiSOAPSkeleton"/>
+  <ns1:parameter name="wsdlServicePort" value="WSBandiEsitiAvvisiSOAP"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:parameter name="wsdlServiceElement" value="WSBandiEsitiAvvisi"/>
+  <ns1:parameter name="schemaUnqualified" value="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns2:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns1:FileType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.FileType" xmlns:ns1="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/" xmlns:ns2="http://xml.apache.org/axis/wsdd/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns2:DocumentoAllegatoType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DocumentoAllegatoType" xmlns:ns2="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns3:EsitoProspettoBeneficiariType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.EsitoProspettoBeneficiariType" xmlns:ns3="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns4:DettaglioBandoOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioBandoOutType" xmlns:ns4="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns5:DettaglioContrattoType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioContrattoType" xmlns:ns5="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns6:ProspettoGareContrattiAnticorruzioneOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType" xmlns:ns6="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns7:DocumentoBandoOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DocumentoBandoOutType" xmlns:ns7="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns8:DettaglioBandoType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioBandoType" xmlns:ns8="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns9:DocumentiConsulentiCollaboratoriOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DocumentiConsulentiCollaboratoriOutType" xmlns:ns9="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns10:ElencoBandiOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ElencoBandiOutType" xmlns:ns10="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns11:ConsulenteCollaboratoreType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ConsulenteCollaboratoreType" xmlns:ns11="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns12:ConsulentiCollaboratoriOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ConsulentiCollaboratoriOutType" xmlns:ns12="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns13:AppaltoAggiudicatoAnticorruzioneType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.AppaltoAggiudicatoAnticorruzioneType" xmlns:ns13="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns14:DettaglioContrattoOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioContrattoOutType" xmlns:ns14="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns15:BandoListaType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.BandoListaType" xmlns:ns15="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns16:AdempimentoAnticorruzioneType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.AdempimentoAnticorruzioneType" xmlns:ns16="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns17:AdempimentoAnticorruzioneOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.AdempimentoAnticorruzioneOutType" xmlns:ns17="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns18:OperatoreInvitatoType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.OperatoreInvitatoType" xmlns:ns18="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns19:OperatoreType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.OperatoreType" xmlns:ns19="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns20:DocumentiBeneficiarioOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DocumentiBeneficiarioOutType" xmlns:ns20="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns21:ProspettoContrattiOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoContrattiOutType" xmlns:ns21="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns22:ProspettoBeneficiariOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoBeneficiariOutType" xmlns:ns22="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns23:VersionOutType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.VersionOutType" xmlns:ns23="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns24:ProspettoContrattoType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoContrattoType" xmlns:ns24="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns25:PartecipanteType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.PartecipanteType" xmlns:ns25="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/"/>
+ </ns1:service>
+ <ns1:service name="Version" provider="java:RPC">
+  <ns1:parameter name="allowedMethods" value="getVersion"/>
+  <ns1:parameter name="className" value="org.apache.axis.Version"/>
+ </ns1:service>
+ <ns1:transport name="http">
+  <ns1:requestFlow>
+   <ns1:handler type="URLMapper"/>
+   <ns1:handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+  </ns1:requestFlow>
+  <ns1:parameter name="qs:list" value="org.apache.axis.transport.http.QSListHandler"/>
+  <ns1:parameter name="qs:wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
+  <ns1:parameter name="qs.list" value="org.apache.axis.transport.http.QSListHandler"/>
+  <ns1:parameter name="qs.method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+  <ns1:parameter name="qs:method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+  <ns1:parameter name="qs.wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
+ </ns1:transport>
+ <ns1:transport name="local">
+  <ns1:responseFlow>
+   <ns1:handler type="LocalResponder"/>
+  </ns1:responseFlow>
+ </ns1:transport>
+</ns1:deployment>

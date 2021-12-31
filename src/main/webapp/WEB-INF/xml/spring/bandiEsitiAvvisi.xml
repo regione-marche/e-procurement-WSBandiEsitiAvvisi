@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:jee="http://www.springframework.org/schema/jee"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+				http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.0.xsd" >
+
+	<jee:jndi-lookup id="authenticationToken" jndi-name="java:comp/env/authentication.token"/>
+	<jee:jndi-lookup id="stazioneAppaltanteFiltroObbligatorio" jndi-name="java:comp/env/stazioneAppaltante.filtro.obbligatorio"/>
+	<jee:jndi-lookup id="applicationFilesystemShared" jndi-name="java:comp/env/application.filesystem.shared"/>
+	<jee:jndi-lookup id="rssXmlMultiStazioneAppaltante" jndi-name="java:comp/env/rss.xml.multiStazioneAppaltante"/>
+	<jee:jndi-lookup id="rssQuartzCronExpression" jndi-name="java:comp/env/rss.quartz.cronExpression"/>
+	<jee:jndi-lookup id="portaleAppaltiWS" jndi-name="java:comp/env/portaleAppalti.ws"/>
+	<jee:jndi-lookup id="deltaGiorniBandi" jndi-name="java:comp/env/deltaGiorni.bandi"/>
+	<jee:jndi-lookup id="rssFilenameBandi" jndi-name="java:comp/env/rss.filename.bandi"/>
+	<jee:jndi-lookup id="rssChannelLinkBandi" jndi-name="java:comp/env/rss.channel.link.bandi"/>
+	<jee:jndi-lookup id="rssItemLinkTemplateBandi" jndi-name="java:comp/env/rss.item.linkTemplate.bandi"/>
+	<jee:jndi-lookup id="deltaGiorniBandiScaduti" jndi-name="java:comp/env/deltaGiorni.bandiScaduti"/>
+	<jee:jndi-lookup id="rssFilenameBandiScaduti" jndi-name="java:comp/env/rss.filename.bandiScaduti"/>
+	<jee:jndi-lookup id="rssChannelLinkBandiScaduti" jndi-name="java:comp/env/rss.channel.link.bandiScaduti"/>
+	<jee:jndi-lookup id="rssItemLinkTemplateBandiScaduti" jndi-name="java:comp/env/rss.item.linkTemplate.bandiScaduti"/>
+	<jee:jndi-lookup id="beneficiariLinkTemplate" jndi-name="java:comp/env/beneficiari.linkTemplate"/>
+	<jee:jndi-lookup id="consulentiLinkTemplate" jndi-name="java:comp/env/consulenti.linkTemplate"/>
+
+	<!-- ========================= DAO DEFINITIONS: IBATIS IMPLEMENTATIONS ========================= -->
+
+	<bean id="quartzLockDao"
+		class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.dao.ibatis.SqlMapQuartzLockDao">
+		<property name="dataSource" ref="dataSource" />
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<property name="dbms">
+			<bean factory-bean="dbmsSpecs" factory-method="getInternalDbmsCode" />
+		</property>
+	</bean>
+
+	<bean id="bandiEsitiAvvisiDao"
+		class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.dao.ibatis.SqlMapBandiEsitiAvvisiDao">
+		<property name="dataSource" ref="dataSource" />
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<!-- ========================= BEAN DEFINITIONS ========================= -->
+	<bean id="quartzLockManagerTransactionProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_SUPPORTS</prop>
+				<prop key="insert*">PROPAGATION_REQUIRES_NEW</prop>
+				<prop key="delete*">PROPAGATION_REQUIRES_NEW</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="quartzLockManager" parent="quartzLockManagerTransactionProxy">
+		<property name="target">
+			<bean class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.QuartzLockManager">
+				<property name="quartzLockDao" ref="quartzLockDao" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="bandiEsitiAvvisiManager" parent="defaultTransactionProxy">
+		<property name="target">
+			<bean class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.BandiEsitiAvvisiManager">
+				<property name="bandiDao" ref="bandiEsitiAvvisiDao" />
+				<property name="templateLinkBeneficiari" ref="beneficiariLinkTemplate" />
+				<property name="templateLinkConsulenti" ref="consulentiLinkTemplate" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="bandiEsitiAvvisiFacade"
+		class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.BandiEsitiAvvisiFacade">
+		<property name="bandiManager" ref="bandiEsitiAvvisiManager" />
+		<property name="authenticationToken" ref="authenticationToken" />		
+		<property name="templateLinkBeneficiari" ref="beneficiariLinkTemplate" />
+		<property name="templateLinkConsulenti" ref="consulentiLinkTemplate" />
+		<property name="obbStazioneAppaltante" ref="stazioneAppaltanteFiltroObbligatorio"/>  
+	</bean>
+	
+	<bean id="rssFeedBandi" class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.tasks.RssFeedBandi">
+		<property name="bandiManager" ref="bandiEsitiAvvisiManager" />
+		<property name="channelTitle" value="Bandi di gara" />
+		<property name="channelDescription" value="Elenco dei bandi, avvisi e esiti di gara non scaduti" />
+		<property name="channelLink" ref="rssChannelLinkBandi" />
+		<property name="patternItemLink" ref="rssItemLinkTemplateBandi" />
+		<property name="deltaGiorniBandi" ref="deltaGiorniBandi" />
+ 		<property name="rssFilenameBandi" ref="rssFilenameBandi" />
+ 		<property name="multiStazioneAppaltante" ref="rssXmlMultiStazioneAppaltante"/>
+		<property name="areaShared" ref="applicationFilesystemShared"/> 
+	</bean>
+
+	<bean id="rssFeedBandiScaduti" class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.tasks.RssFeedBandiScaduti">
+		<property name="bandiManager" ref="bandiEsitiAvvisiManager" />
+		<property name="channelTitle" value="Bandi di gara scaduti" />
+		<property name="channelDescription" value="Elenco dei bandi e avvisi di gara scaduti" />
+		<property name="channelLink" ref="rssChannelLinkBandiScaduti" />
+		<property name="patternItemLink" ref="rssItemLinkTemplateBandiScaduti" />
+		<property name="deltaGiorniBandiScaduti" ref="deltaGiorniBandiScaduti" />
+ 		<property name="rssFilenameBandi" ref="rssFilenameBandiScaduti" />
+		<property name="multiStazioneAppaltante" ref="rssXmlMultiStazioneAppaltante"/>
+ 		<property name="areaShared" ref="applicationFilesystemShared"/>
+	</bean>
+
+	<bean id="generalRssFeedBandi" class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.tasks.GeneralRssFeedBandi">
+		<property name="areaShared" ref="applicationFilesystemShared"/>
+		<property name="urlWSPortale" ref="portaleAppaltiWS"/>  
+		<property name="rssBandi" ref="rssFeedBandi" />
+		<property name="rssBandiScaduti" ref="rssFeedBandiScaduti" />
+	</bean>
+	
+	<bean id="springAppContext" class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.utils.SpringAppContext" />
+
+	<!-- ============ TASK SCHEDULING ============ -->
+	
+	<bean id="rssFeedBandiJob"
+		class="it.maggioli.eldasoft.appalti.bandiesitiavvisi.utils.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="generalRssFeedBandi" />
+		<property name="targetMethod" value="refreshRssFeed" />
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="rssFeedBandiTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="rssFeedBandiJob" />
+		<property name="cronExpression" ref="rssQuartzCronExpression" />
+	</bean>
+	
+	<bean id="quartzFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+  		<list>
+  			<ref bean="rssFeedBandiTrigger"/>
+   		</list>
+ 		</property>
+	</bean>
+</beans>

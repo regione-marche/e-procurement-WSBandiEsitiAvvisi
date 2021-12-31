@@ -1,0 +1,1103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="WSBandiEsitiAvvisi" targetNamespace="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/">
+			<xsd:element name="GetElencoBandi">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="token" nillable="true" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Token di autenticazione (se previsto
+									dal Web Service)
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="tipo" nillable="false" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Valori ammessi: Bando Esito Avviso
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="contratto" nillable="true" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Valori ammessi: Lavori Forniture
+									Servizi
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="pubblicazioneDa" nillable="true" type="xsd:date"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="pubblicazioneA" nillable="true" type="xsd:date"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="cig" nillable="true" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="codiceStazAppaltante" nillable="false" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Codice fiscale stazione appaltante
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetElencoBandiResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="risultato" type="tns:ElencoBandiOutType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetElencoBandiScaduti">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="token" nillable="true" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Token di autenticazione (se previsto
+									dal Web Service)
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="tipo" nillable="false" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Valori ammessi: Bando Avviso
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="contratto" nillable="true" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Valori ammessi: Lavori Forniture
+									Servizi
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="pubblicazioneDa" nillable="true" type="xsd:date"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="pubblicazioneA" nillable="true" type="xsd:date"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="cig" nillable="true" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="codiceStazAppaltante" nillable="false" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Codice fiscale stazione appaltante
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetElencoBandiScadutiResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element name="risultato" type="tns:ElencoBandiOutType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDettaglioBando">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="token" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Token di autenticazione (se previsto dal Web Service)
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="codice" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="tipo" type="xsd:string">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDettaglioBandoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element name="risultato" type="tns:DettaglioBandoOutType">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocumentoBando">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="token" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Token di autenticazione (se previsto dal Web Service)
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="codice" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="tipo" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="id" type="xsd:int">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocumentoBandoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="risultato" type="tns:DocumentoBandoOutType">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="ElencoBandiOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="numBandi" type="xsd:int">
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="bando" type="tns:BandoListaType">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="DettaglioBandoType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="codice" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="codiceLotto" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="tipo" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="titolo" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="contratto" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="codiceFiscaleAmministrazione" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="amministrazione" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="tipoAmministrazione" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="descTipoAmministrazione" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="provinciaSedeGara" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="comuneSedeGara" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="indirizzoSedeGara" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="senzaImporto" type="xsd:boolean">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoBaseAsta" type="xsd:double">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoAggiudicazione" type="xsd:double">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="criterioAggiudicazione" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="pubblicazione" type="xsd:date">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="scadenzaBando" type="xsd:date">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="scadenzaPubblEsito" type="xsd:date">
+					</xsd:element>
+
+					<xsd:element maxOccurs="1" minOccurs="0" name="scadenzaAvviso" type="xsd:date"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="reqQualificazione" type="xsd:string">
+					</xsd:element>
+
+					<xsd:element maxOccurs="1" minOccurs="0" name="descReqQualificazione" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="cpv" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="descCpv" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="scp" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="urlPubblicazione" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="cig" type="xsd:string">
+					</xsd:element>
+
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="DocumentoAllegatoType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="descrizione" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Descrizione del documento
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:sequence>
+							<xsd:element maxOccurs="1" minOccurs="1" name="nomefile" nillable="true" type="xsd:string">
+								<xsd:annotation>
+									<xsd:documentation>
+										Nome del file allegato
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element maxOccurs="1" minOccurs="1" name="id" nillable="true" type="xsd:int">
+								<xsd:annotation>
+									<xsd:documentation>
+										Id da utilizzare per richiedere
+										l'apertura del documento
+									</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="url" nillable="true" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									URL del documento in rete
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="DettaglioBandoOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="bando" type="tns:DettaglioBandoType">
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="documento" type="tns:DocumentoAllegatoType"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="BandoListaType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="codice" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="tipo" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="contratto" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="pubblicazione" type="xsd:date">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="scadenzaBando" type="xsd:date">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="scadenzaPubblEsito" type="xsd:date">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="scadenzaAvviso" type="xsd:date"/>
+					<xsd:element maxOccurs="1" minOccurs="1" name="titolo" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="cig" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="codiceStazAppaltante" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="stazioneAppaltante" type="xsd:string">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="DocumentoBandoOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="file" type="tns:FileType">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="FileType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="nome" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="1" name="file" type="xsd:base64Binary"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="AdempimentoAnticorruzioneOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="numAdempimenti" type="xsd:int"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="adempimento" type="tns:AdempimentoAnticorruzioneType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="AdempimentoAnticorruzioneType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="codice" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="stazioneAppaltante" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="codiceFiscaleSA" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="annoRiferimento" type="xsd:int">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="url" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="pubblicato" type="xsd:int">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="dataPubblicazione" nillable="true" type="xsd:date"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="dataAggiornamento" nillable="true" type="xsd:date"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="dataApprovazione" nillable="true" type="xsd:date"/>					
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="ProspettoContrattiOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="contratto" type="tns:ProspettoContrattoType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="ProspettoContrattoType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="cig"
+						type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="strutturaProponenteCF" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="strutturaProponenteDenominazione" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="oggetto" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="sceltaContraente" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0"
+						name="aggiudicatario" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="importoAggiudicazione" type="xsd:double">
+					</xsd:element>
+					<xsd:element name="importoContratto" type="xsd:double" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="dataInizio" type="xsd:date">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="dataUltimazione" type="xsd:date">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="importoSommeLiquidate" type="xsd:double">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="codice" type="xsd:string">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="DettaglioContrattoOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="dettaglioContratto" type="tns:DettaglioContrattoType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="DettaglioContrattoType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="cig"
+						type="xsd:string" />
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="strutturaProponenteCF" type="xsd:string" />
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="strutturaProponenteDenominazione" type="xsd:string" />
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="oggetto" type="xsd:string" />
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="sceltaContraente" type="xsd:string" />
+					<xsd:element maxOccurs="unbounded" minOccurs="0"
+						name="elencoOperatoriInvitati" type="tns:OperatoreInvitatoType" />
+					<xsd:element maxOccurs="unbounded" minOccurs="0"
+						name="aggiudicatario" type="tns:OperatoreInvitatoType" />
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="importoAggiudicazione" type="xsd:double" />
+					<xsd:element name="importoContratto" type="xsd:double" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="dataInizio" type="xsd:date" />
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="dataUltimazione" type="xsd:date" />
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="importoSommeLiquidate" type="xsd:double" />
+					<xsd:element maxOccurs="1" minOccurs="0"
+						name="codice" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="OperatoreInvitatoType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="ditta" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="ragioneSociale" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="codiceFiscale" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="partitaIva" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="rti" type="xsd:boolean"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="componentiRti" type="tns:OperatoreType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="OperatoreType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="ragioneSociale" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="codiceFiscale" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="partitaIva" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="mandataria" type="xsd:boolean"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:element name="GetProspettoBeneficiari">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="token" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Token di autenticazione (se previsto dal Web Service)
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="dataAffidamentoDa" type="xsd:date">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="dataAffidamentoA" type="xsd:date">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetProspettoBeneficiariResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="risultato" type="tns:ProspettoBeneficiariOutType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="ProspettoBeneficiariOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="numEsiti" type="xsd:int">
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="esito" type="tns:EsitoProspettoBeneficiariType">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="EsitoProspettoBeneficiariType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="codice" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="dataAffidamento" type="xsd:date">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="cig" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="oggetto" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="codiceBeneficiario" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="1" name="beneficiario" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="datiFiscali" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="importo" type="xsd:double">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="norma" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="ufficio" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="rup" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="modalita" type="xsd:string">
+					</xsd:element>
+
+					<xsd:element maxOccurs="1" minOccurs="0" name="url" type="xsd:string">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetDocumentiBeneficiario">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="token" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Token di autenticazione (se previsto
+									dal Web Service)
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="codice" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="codiceBeneficiario" type="xsd:string">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocumentiBeneficiarioResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element name="risultato" type="tns:DocumentiBeneficiarioOutType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetProspettoGareContrattiAnticorruzione">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="token" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Token di autenticazione (se previsto
+									dal Web Service)
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="anno" type="xsd:int">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="cig" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="proponente" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="oggetto" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="partecipante" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="aggiudicatario" type="xsd:string">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetProspettoGareContrattiAnticorruzioneResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="risultato" type="tns:ProspettoGareContrattiAnticorruzioneOutType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="ProspettoGareContrattiAnticorruzioneOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="numAppaltiAggiudicati" type="xsd:int">
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="appalto" type="tns:AppaltoAggiudicatoAnticorruzioneType">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="AppaltoAggiudicatoAnticorruzioneType">
+				<xsd:sequence>
+
+					<xsd:element maxOccurs="1" minOccurs="1" name="cig" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="codiceFiscaleProponente" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="denominazioneProponente" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="oggetto" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="sceltaContraente" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="partecipante" type="tns:PartecipanteType">
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="aggiudicatario" type="tns:PartecipanteType">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoAggiudicazione" type="xsd:double">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="dataInizio" type="xsd:date">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="dataUltimazione" type="xsd:date"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoSommeLiquidate" type="xsd:double">
+					</xsd:element>
+
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="DocumentiBeneficiarioOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="documento" type="tns:FileType">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+                </xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="PartecipanteType">
+				<xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="codiceFiscale" nillable="true" type="xsd:string">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="idFiscaleEstero" nillable="true" type="xsd:string">
+					</xsd:element>
+
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ragioneSociale" type="xsd:string">
+					</xsd:element>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ruolo" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Get">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element name="in" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element name="out" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetAdempimentiAnticorruzione">
+				<xsd:complexType>
+					<xsd:sequence>
+
+                        <xsd:element maxOccurs="1" minOccurs="0" name="token" type="xsd:string">
+						</xsd:element>
+                        <xsd:element maxOccurs="1" minOccurs="0" name="anno" type="xsd:int"/>
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetAdempimentiAnticorruzioneResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="risultato" type="tns:AdempimentoAnticorruzioneOutType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetProspettoContratti">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="token" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="cig" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="strutturaProponente" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="oggetto" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="tipoAppalto" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="partecipante" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="aggiudicatario" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="dataPubblicazioneEsitoDa" type="xsd:date">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="dataPubblicazioneEsitoA" type="xsd:date">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetProspettoContrattiResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="risultato" type="tns:ProspettoContrattiOutType">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDettaglioContratto">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="token" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="codice" type="xsd:string">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDettaglioContrattoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="risultato" type="tns:DettaglioContrattoOutType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetVersion">
+				<xsd:complexType>
+					<xsd:sequence>
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetVersionResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element name="risultato" type="tns:VersionOutType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		
+			<xsd:complexType name="VersionOutType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="version" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GetConsulentiCollaboratori">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element maxOccurs="1" minOccurs="0" name="token" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="stazioneAppaltante" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="soggettoPercettore" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="dataDa" type="xsd:date">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="dataA" type="xsd:date">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="ragioneIncarico" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="compensoPrevistoDa" type="xsd:double">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="compensoPrevistoA" type="xsd:double">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetConsulentiCollaboratoriResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+
+						<xsd:element name="risultato" type="tns:ConsulentiCollaboratoriOutType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+            <xsd:complexType name="ConsulentiCollaboratoriOutType">
+            	<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="numConsulentiCollaboratori" type="xsd:int">
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="consulentiCollaboratori" type="tns:ConsulenteCollaboratoreType">
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+				</xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ConsulenteCollaboratoreType">
+            	<xsd:sequence>
+            		<!--
+            		<xsd:element maxOccurs="1" minOccurs="0" name="codiceSA" type="xsd:string">
+            		</xsd:element>
+            		-->
+            		<xsd:element maxOccurs="1" minOccurs="0" name="stazioneAppaltante" type="xsd:string">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="codice" type="xsd:string">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="codiceSoggetto" type="xsd:string">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="soggettoPercettore" type="xsd:string">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="protocollo" type="xsd:string">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="data" type="xsd:date">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="ragioneIncarico" type="xsd:string">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="oggettoPrestazione" type="xsd:string">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="compensoPrevisto" type="xsd:double">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="parteVariabile" type="xsd:string">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="dataDa" type="xsd:date">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="dataA" type="xsd:date">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="tipoProcedura" type="xsd:string">
+            		</xsd:element>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="numeroPartecipanti" type="xsd:int">
+            		</xsd:element>
+
+            		<xsd:element maxOccurs="1" minOccurs="0" name="url" type="xsd:string"/>
+            	</xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="GetDocumentiConsulentiCollaboratori">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element maxOccurs="1" minOccurs="0" name="token" type="xsd:string"/>
+            			<xsd:element maxOccurs="1" minOccurs="1" name="codice" type="xsd:string">
+            			</xsd:element>
+            			<xsd:element maxOccurs="1" minOccurs="1" name="codiceSoggetto" type="xsd:string">
+            			</xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="GetDocumentiConsulentiCollaboratoriResponse">
+            	<xsd:complexType>
+            		<xsd:sequence>
+
+                        <xsd:element name="risultato" type="tns:DocumentiConsulentiCollaboratoriOutType"/>
+                    </xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+		
+            <xsd:complexType name="DocumentiConsulentiCollaboratoriOutType">
+            	<xsd:sequence>
+            		<xsd:element maxOccurs="unbounded" minOccurs="0" name="documento" type="tns:FileType"/>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="errore" type="xsd:string"/>
+            	</xsd:sequence>
+            </xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="GetElencoBandiRequest">
+		<wsdl:part element="tns:GetElencoBandi" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetElencoBandiResponse">
+		<wsdl:part element="tns:GetElencoBandiResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetElencoBandiScadutiRequest">
+		<wsdl:part element="tns:GetElencoBandiScaduti" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetElencoBandiScadutiResponse">
+		<wsdl:part element="tns:GetElencoBandiScadutiResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDettaglioBandoRequest">
+		<wsdl:part element="tns:GetDettaglioBando" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDettaglioBandoResponse">
+		<wsdl:part element="tns:GetDettaglioBandoResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDocumentoBandoRequest">
+		<wsdl:part element="tns:GetDocumentoBando" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDocumentoBandoResponse">
+		<wsdl:part element="tns:GetDocumentoBandoResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetProspettoBeneficiariRequest">
+		<wsdl:part element="tns:GetProspettoBeneficiari" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetProspettoBeneficiariResponse">
+		<wsdl:part element="tns:GetProspettoBeneficiariResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDocumentiBeneficiarioRequest">
+		<wsdl:part element="tns:GetDocumentiBeneficiario" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDocumentiBeneficiarioResponse">
+		<wsdl:part element="tns:GetDocumentiBeneficiarioResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetProspettoGareContrattiAnticorruzioneRequest">
+		<wsdl:part element="tns:GetProspettoGareContrattiAnticorruzione" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetProspettoGareContrattiAnticorruzioneResponse">
+		<wsdl:part element="tns:GetProspettoGareContrattiAnticorruzioneResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetRequest">
+		<wsdl:part element="tns:Get" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetResponse">
+		<wsdl:part element="tns:GetResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetAdempimentiAnticorruzioneRequest">
+		<wsdl:part element="tns:GetAdempimentiAnticorruzione" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetAdempimentiAnticorruzioneResponse">
+		<wsdl:part element="tns:GetAdempimentiAnticorruzioneResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetProspettoContrattiRequest">
+		<wsdl:part element="tns:GetProspettoContratti" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetProspettoContrattiResponse">
+		<wsdl:part element="tns:GetProspettoContrattiResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDettaglioContrattoRequest">
+		<wsdl:part element="tns:GetDettaglioContratto" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDettaglioContrattoResponse">
+		<wsdl:part element="tns:GetDettaglioContrattoResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetVersionRequest">
+		<wsdl:part element="tns:GetVersion" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetVersionResponse">
+		<wsdl:part element="tns:GetVersionResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetConsulentiCollaboratoriRequest">
+		<wsdl:part element="tns:GetConsulentiCollaboratori" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetConsulentiCollaboratoriResponse">
+		<wsdl:part element="tns:GetConsulentiCollaboratoriResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDocumentiConsulentiCollaboratoriRequest">
+		<wsdl:part element="tns:GetDocumentiConsulentiCollaboratori" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="GetDocumentiConsulentiCollaboratoriResponse">
+		<wsdl:part element="tns:GetDocumentiConsulentiCollaboratoriResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:portType name="WSBandiEsitiAvvisi">
+		<wsdl:operation name="GetElencoBandi">
+			<wsdl:input message="tns:GetElencoBandiRequest"/>
+			<wsdl:output message="tns:GetElencoBandiResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetElencoBandiScaduti">
+			<wsdl:input message="tns:GetElencoBandiScadutiRequest"/>
+			<wsdl:output message="tns:GetElencoBandiScadutiResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetDettaglioBando">
+			<wsdl:input message="tns:GetDettaglioBandoRequest"/>
+			<wsdl:output message="tns:GetDettaglioBandoResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentoBando">
+			<wsdl:input message="tns:GetDocumentoBandoRequest"/>
+			<wsdl:output message="tns:GetDocumentoBandoResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetProspettoBeneficiari">
+			<wsdl:input message="tns:GetProspettoBeneficiariRequest"/>
+			<wsdl:output message="tns:GetProspettoBeneficiariResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentiBeneficiario">
+			<wsdl:input message="tns:GetDocumentiBeneficiarioRequest"/>
+			<wsdl:output message="tns:GetDocumentiBeneficiarioResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetProspettoGareContrattiAnticorruzione">
+			<wsdl:input message="tns:GetProspettoGareContrattiAnticorruzioneRequest"/>
+			<wsdl:output message="tns:GetProspettoGareContrattiAnticorruzioneResponse"/>
+		</wsdl:operation>
+
+		<wsdl:operation name="GetAdempimentiAnticorruzione">
+			<wsdl:input message="tns:GetAdempimentiAnticorruzioneRequest"/>
+			<wsdl:output message="tns:GetAdempimentiAnticorruzioneResponse"/>
+		</wsdl:operation>
+
+		<wsdl:operation name="GetProspettoContratti">
+			<wsdl:input message="tns:GetProspettoContrattiRequest"/>
+			<wsdl:output message="tns:GetProspettoContrattiResponse"/>
+		</wsdl:operation>
+
+		<wsdl:operation name="GetDettaglioContratto">
+			<wsdl:input message="tns:GetDettaglioContrattoRequest"/>
+			<wsdl:output message="tns:GetDettaglioContrattoResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetVersion">
+			<wsdl:input message="tns:GetVersionRequest"/>
+			<wsdl:output message="tns:GetVersionResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetConsulentiCollaboratori">
+			<wsdl:input message="tns:GetConsulentiCollaboratoriRequest"/>
+			<wsdl:output message="tns:GetConsulentiCollaboratoriResponse"/>
+        </wsdl:operation>
+
+		<wsdl:operation name="GetDocumentiConsulentiCollaboratori">
+			<wsdl:input message="tns:GetDocumentiConsulentiCollaboratoriRequest"/>
+			<wsdl:output message="tns:GetDocumentiConsulentiCollaboratoriResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="WSBandiEsitiAvvisiSOAP" type="tns:WSBandiEsitiAvvisi">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="GetElencoBandi">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetElencoBandi"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetElencoBandiScaduti">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetElencoBandiScaduti"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDettaglioBando">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetDettaglioBando"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentoBando">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetDocumentoBando"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetProspettoBeneficiari">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetProspettoBeneficiari"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentiBeneficiario">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetDocumentiBeneficiario"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetProspettoGareContrattiAnticorruzione">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetProspettoGareContrattiAnticorruzione"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetAdempimentiAnticorruzione">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetAdempimentiAnticorruzione"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetProspettoContratti">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetProspettoContratti"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDettaglioContratto">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetDettaglioContratto"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetVersion">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetVersion"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetConsulentiCollaboratori">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetConsulentiCollaboratori"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentiConsulentiCollaboratori">
+			<soap:operation soapAction="http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/GetDocumentiConsulentiCollaboratori"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="WSBandiEsitiAvvisi">
+		<wsdl:port binding="tns:WSBandiEsitiAvvisiSOAP" name="WSBandiEsitiAvvisiSOAP">
+			<soap:address location="http://localhost:8080/WebServiceProject/services/WSBandiEsitiAvvisiSOAP"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

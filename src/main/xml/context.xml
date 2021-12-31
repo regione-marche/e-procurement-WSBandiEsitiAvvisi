@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context path="/${nomeWebapp}">
+
+	<!-- [DATABASE] -->
+	<Resource name="jdbc/${nomeWebapp}"
+		auth="Container" 
+		type="javax.sql.DataSource" 
+		driverClassName="" 
+		url=""
+		username="" 
+		password=""
+		autocommit="false"
+		maxActive="20" 
+		maxIdle="10" 
+		maxWait="-1" />
+
+	<!-- Connessione ORACLE -->
+	<!--
+	<Resource name="jdbc/${nomeWebapp}" 
+		auth="Container" 
+		type="javax.sql.DataSource" 
+		driverClassName="oracle.jdbc.driver.OracleDriver" 
+		url="jdbc:oracle:thin:@localhost:1521:XE" 
+		username="${nomeDB}" 
+		password="${nomeDB}" 
+		autocommit="false"
+		maxActive="20" 
+		maxIdle="10" 
+		maxWait="-1" />
+	-->
+
+	<!-- Connessione SQL SERVER -->
+	<!--
+	<Resource name="jdbc/${nomeWebapp}" 
+		auth="Container" 
+		type="javax.sql.DataSource" 
+		driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
+		url="jdbc:sqlserver://localhost:1433;databaseName=${nomeDB}" 
+		username="${nomeDB}" 
+		password="${nomeDB}" 
+		autocommit="false"
+		maxActive="20" 
+		maxIdle="10" 
+		maxWait="-1"/>
+	-->
+
+	<!-- Connessione POSTGRESQL -->
+	<!--
+	<Resource name="jdbc/${nomeWebapp}" 
+		auth="Container" 
+		type="javax.sql.DataSource" 
+		driverClassName="org.postgresql.Driver" 
+		url="jdbc:postgresql://localhost:5432/${nomeDB}" 
+		username="${nomeDB}" 
+		password="${nomeDB}" 
+		autocommit="false"
+		maxActive="20" 
+		maxIdle="10" 
+		maxWait="-1"/>
+	-->
+	
+	<!-- Connessione DB2 -->
+	<!--
+	<Resource name="jdbc/${nomeWebapp}" 
+		auth="Container" 
+		type="javax.sql.DataSource" 
+		driverClassName="com.ibm.db2.jcc.DB2Driver" 
+		url="jdbc:db2://localhost:50000/${nomeDB}" 
+		username="${nomeDB}" 
+		password="${nomeDB}" 
+		autocommit="false"
+		maxActive="10" 
+		maxIdle="10" 
+		maxWait="-1"/>
+	-->
+
+
+	<!-- [TOKEN DI AUTENTICAZIONE] -->
+
+	<!--
+	se valorizzato implica che il fruitore in ogni chiamata deve valorizzare il parametro token con il codice indicato
+	default = vuoto 
+	-->
+	<Environment name="authentication.token" value="${authentication.token}" type="java.lang.String" override="false" />
+		
+
+	<!-- [WEB SERVICE] -->
+	
+	<!--
+	attivazione/disattivazione del controllo obbligatorieta' del filtro per stazione appaltante in estrazione dei 
+	bandi/esiti/avvisi in corso e scaduti  
+	1 [DEFAULT] = le operazioni obbligano l'indicazione del C.F. di una stazione appaltante in input alle operazioni
+	0 = le operazioni accettano anche richieste senza indicazione di alcun C.F. stazione appaltante
+	-->
+	<Environment name="stazioneAppaltante.filtro.obbligatorio" value="${stazioneAppaltante.filtro.obbligatorio}" type="java.lang.String" override="false" />
+
+
+	<!-- [RSS FEED] -->
+
+	<!-- 
+	se valorizzato, indica il path assoluto del filesystem in cui generare i file contenenti i feed rss per bandi e bandi scaduti
+	DEFAULT: non valorizzato, per cui si utilizza la sottocartella rss della web application
+	ATTENZIONE: IN CASO DI DEPLOY DEL WAR E' TASSATIVO L'EDITING DELLA PROPERTY, NON E' POSSIBILE GENERARE I FILE DENTRO IL WAR!! 
+	-->
+	<Environment name="application.filesystem.shared" value="${application.filesystem.shared}" type="java.lang.String" override="false" />
+
+	<!-- 
+	generazione dei file xml per gli rss differenziati per stazione appaltante, in sottocartelle contenenti il C.F. della stazione
+	1 [DEFAULT] = genera un unico file per tutte le stazioni appaltanti
+	0 = si genera un file xml per ogni stazione appaltante [NON COMPATIBILE CON IL PORTALE APPALTI]
+	-->
+	<Environment name="rss.xml.multiStazioneAppaltante" value="${rss.xml.multiStazioneAppaltante}" type="java.lang.String" override="false" />
+
+	<!-- 
+	cronExpression Quartz per schedulare la generazione del feed rss
+	-->
+	<Environment name="rss.quartz.cronExpression" value="${rss.quartz.cronExpression}" type="java.lang.String" override="false" />
+
+	<!-- 
+	URL del web service Portale Appalti, da usare SOLO per il trasferimento degli xml degli rss nel portale
+	-->
+	<Environment name="portaleAppalti.ws" value="${portaleAppalti.ws}" type="java.lang.String" override="false" />
+
+
+	<!-- [RSS FEED BANDI] -->
+
+	<!-- 
+	numero massimo di giorni dalla pubblicazione (se non valorizzato si estraggono tutti i bandi pubblicati)
+	-->
+	<Environment name="deltaGiorni.bandi" value="${deltaGiorni.bandi}" type="java.lang.String" override="false" />
+
+	<!-- 
+	nome del file xml  per gli rss bandi/esiti/avvisi NON SCADUTI
+	-->
+	<Environment name="rss.filename.bandi" value="${rss.filename.bandi}" type="java.lang.String" override="false" />
+
+	<!-- 
+	link al canale bandi/esiti/avvisi NON SCADUTI
+	-->
+	<Environment name="rss.channel.link.bandi" value="${rss.channel.link.bandi}" type="java.lang.String" override="false" />
+
+	<!-- 
+	template del link al dettaglio bando/esito/avviso NON SCADUTI, in cui {} verranno sostituiti dai parametri a runtime
+	-->
+	<Environment name="rss.item.linkTemplate.bandi" value="${rss.item.linkTemplate.bandi}" type="java.lang.String" override="false" />
+
+
+	<!-- [RSS FEED BANDI SCADUTI] -->
+
+	<!-- 
+	numero massimo di giorni dalla scadenza (se non valorizzato si estraggono tutti i bandi scaduti)
+	-->
+	<Environment name="deltaGiorni.bandiScaduti" value="${deltaGiorni.bandiScaduti}" type="java.lang.String" override="false" />
+
+	<!-- 
+	nome del file xml  per gli rss bandi/avvisi SCADUTI
+	-->
+	<Environment name="rss.filename.bandiScaduti" value="${rss.filename.bandiScaduti}" type="java.lang.String" override="false" />
+
+	<!-- 
+	link al canale bandi/avvisi SCADUTI
+	-->
+	<Environment name="rss.channel.link.bandiScaduti" value="${rss.channel.link.bandiScaduti}" type="java.lang.String" override="false" />
+
+	<!-- 
+	template del link al dettaglio bando/avviso SCADUTI, in cui {} verranno sostituiti dai parametri a runtime
+	-->
+	<Environment name="rss.item.linkTemplate.bandiScaduti" value="${rss.item.linkTemplate.bandiScaduti}" type="java.lang.String" override="false" />
+
+
+	<!-- [AMMINISTRAZIONE TRASPARENTE - PROSPETTO BENEFICIARI] -->
+
+	<!-- 
+	template del link al download documenti soggetti beneficiari, in cui {} verranno sostituiti dai parametri a runtime
+	-->
+	<Environment name="beneficiari.linkTemplate" value="${beneficiari.linkTemplate}" type="java.lang.String" override="false" />
+
+
+	<!-- [AMMINISTRAZIONE TRASPARENTE - CONSULENTI E COLLABORATORI] -->
+
+	<!-- 
+	template del link al download documenti consulenti collaboratori, in cui {} verranno sostituiti dai parametri a runtime
+	-->
+	<Environment name="consulenti.linkTemplate" value="${consulenti.linkTemplate}" type="java.lang.String" override="false" />
+	
+</Context>

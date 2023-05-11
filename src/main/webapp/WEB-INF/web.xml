@@ -5,19 +5,20 @@
   <description>Servizi Web per la pubblicazione di dati sui bandi di gara, esiti ed avvisi - Maggioli S.p.A.</description>
   <distributable/>
 
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			/WEB-INF/xml/spring/systemConfig.xml
-			/WEB-INF/xml/spring/bandiEsitiAvvisi.xml
-		</param-value>
-	</context-param>
-
 	<listener>
 		<listener-class>
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
+	
+	<context-param>
+	    <param-name>contextClass</param-name>
+	    <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+	</context-param>
+	<context-param>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>it.maggioli.eldasoft.appalti.bandiesitiavvisi.SpringConfiguration</param-value>
+	</context-param>
 
 	<servlet>
 		<display-name>Apache-Axis Servlet</display-name>

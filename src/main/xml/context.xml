@@ -9,10 +9,9 @@
 		url=""
 		username="" 
 		password=""
-		autocommit="false"
-		maxActive="20" 
-		maxIdle="10" 
-		maxWait="-1" />
+		defaultAutoCommit="false"
+		maxTotal="20" 
+		maxIdle="10" />
 
 	<!-- Connessione ORACLE -->
 	<!--
@@ -23,10 +22,9 @@
 		url="jdbc:oracle:thin:@localhost:1521:XE" 
 		username="${nomeDB}" 
 		password="${nomeDB}" 
-		autocommit="false"
-		maxActive="20" 
-		maxIdle="10" 
-		maxWait="-1" />
+		defaultAutoCommit="false"
+		maxTotal="20" 
+		maxIdle="10" />
 	-->
 
 	<!-- Connessione SQL SERVER -->
@@ -38,10 +36,9 @@
 		url="jdbc:sqlserver://localhost:1433;databaseName=${nomeDB}" 
 		username="${nomeDB}" 
 		password="${nomeDB}" 
-		autocommit="false"
-		maxActive="20" 
-		maxIdle="10" 
-		maxWait="-1"/>
+		defaultAutoCommit="false"
+		maxTotal="20" 
+		maxIdle="10" />
 	-->
 
 	<!-- Connessione POSTGRESQL -->
@@ -53,10 +50,9 @@
 		url="jdbc:postgresql://localhost:5432/${nomeDB}" 
 		username="${nomeDB}" 
 		password="${nomeDB}" 
-		autocommit="false"
-		maxActive="20" 
-		maxIdle="10" 
-		maxWait="-1"/>
+		defaultAutoCommit="false"
+		maxTotal="20" 
+		maxIdle="10" />
 	-->
 	
 	<!-- Connessione DB2 -->
@@ -68,10 +64,9 @@
 		url="jdbc:db2://localhost:50000/${nomeDB}" 
 		username="${nomeDB}" 
 		password="${nomeDB}" 
-		autocommit="false"
-		maxActive="10" 
-		maxIdle="10" 
-		maxWait="-1"/>
+		defaultAutoCommit="false"
+		maxTotal="20" 
+		maxIdle="10" />
 	-->
 
 
@@ -174,13 +169,13 @@
 	template del link al download documenti soggetti beneficiari, in cui {} verranno sostituiti dai parametri a runtime
 	-->
 	<Environment name="beneficiari.linkTemplate" value="${beneficiari.linkTemplate}" type="java.lang.String" override="false" />
-
-
+	
+	
 	<!-- [AMMINISTRAZIONE TRASPARENTE - CONSULENTI E COLLABORATORI] -->
-
+	
 	<!-- 
 	template del link al download documenti consulenti collaboratori, in cui {} verranno sostituiti dai parametri a runtime
 	-->
 	<Environment name="consulenti.linkTemplate" value="${consulenti.linkTemplate}" type="java.lang.String" override="false" />
-	
+		
 </Context>

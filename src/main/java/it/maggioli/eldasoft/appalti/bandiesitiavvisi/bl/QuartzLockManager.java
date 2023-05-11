@@ -1,27 +1,28 @@
 package it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl;
 
+import it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.dao.QuartzLockDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DeadlockLoserDataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DeadlockLoserDataAccessException;
-
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.dao.QuartzLockDao;
-
+@Service
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class QuartzLockManager {
 
-	static Logger logger = Logger.getLogger(QuartzLockManager.class);
-
+	private static final Logger logger = LoggerFactory.getLogger(QuartzLockManager.class);
+	
+	@Autowired
 	private QuartzLockDao quartzLockDao;
 	
-	/**
-	 * @param quartzLockDao the quartzLockDao to set
-	 */
-	public void setQuartzLockDao(QuartzLockDao quartzLockDao) {
-		this.quartzLockDao = quartzLockDao;
-	}
-
 	/**
 	 * Tenta di ottenere il lock esclusivo sull'esecuzione del job di Quartz in
 	 * input.
@@ -64,24 +65,30 @@ public class QuartzLockManager {
 			}
 			if (isReleased) {
 				// si procede con l'ottenimento del lock esclusivo
-				this.quartzLockDao.insertQuartzLock(codapp, job, new Date(),
-						server, node);
+				try {
+					this.quartzLockDao.insertQuartzLock(codapp, job, new Date(),
+							server, node);
+				} catch (SQLException s) {
+					logger.debug("lock presente non eseguo");
+				}
+				lock = true;
 				// NOTA: la insert potrebbe andare in errore pur avendo
 				// verificato l'assenza dell'occorrenza, in quanto ad esempio su
 				// Oracle la insert effettuata da un'altra transazione non
 				// ancora chiusa non causa il lock sul record in attesa dello
 				// sblocco della transazione bensi' non si estrae alcuna
 				// occorrenza
-				lock = true;
 			} else {
-				logger.debug("Esecuzione in corso " + job + " su altro nodo");
+				logger.debug("Esecuzione in corso {} su altro nodo", job);
 			}
 		} catch (DataIntegrityViolationException e) {
-			logger.debug("Esecuzione in corso " + job + " su altro nodo: " + e.getMessage());
+			logger.debug("Esecuzione in corso {} su altro nodo: {}", job, e.getMessage());
 		} catch (DeadlockLoserDataAccessException e) {
 			logger.error(
-					"Interrotto causa deadlock l'ottenimento del lock esclusivo per "
-							+ job, e);
+					String.format(
+						"Interrotto causa deadlock l'ottenimento del lock esclusivo per %s",
+								job)
+					, e);
 		}
 		logger.debug("insertQuartzLock: fine metodo");
 		return lock;

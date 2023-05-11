@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Thu Apr 28 17:39:20 CEST 2022-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.mapper.QuartzLockMapper">
+
+  <!-- http://www-01.ibm.com/support/docview.wss?uid=swg21207965 -->
+  <!-- le statement sql per sql server funzionano, le prepared statement creano dei deadlock in caso di esecuzione concorrente pertanto si creano gli sql esatti -->
+
+  <update id="isQuartzLock" parameterType="java.util.HashMap">
+  update w_quartzlock set lock_date = lock_date where codapp = '${codapp}' and job = '${job}'
+  </update>
+
+  <insert id="insertQuartzLock" parameterType="java.util.HashMap">
+  insert into w_quartzlock (codapp, job, lock_date, server_name, node_name) values (#{codapp}, #{job}, #{lockDate}, #{server,jdbcType=VARCHAR}, #{node,jdbcType=VARCHAR})
+  </insert>
+  
+  <delete id="deleteQuartzLock" parameterType="java.util.HashMap">
+  delete from w_quartzlock where codapp = '${codapp}' and job = '${job}'
+  </delete>
+
+  <delete id="deleteQuartzLockByDate" parameterType="java.util.HashMap">
+  delete from w_quartzlock where codapp = '${codapp}' and job = '${job}' and lock_date &lt;= ${maxLockDate}
+  </delete>
+
+</mapper>

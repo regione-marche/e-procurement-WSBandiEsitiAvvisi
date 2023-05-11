@@ -11,94 +11,70 @@
 package it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl;
 
 import it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.vo.CostantiBando;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.AdempimentoAnticorruzioneOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.AdempimentoAnticorruzioneType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.AppaltoAggiudicatoAnticorruzioneType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.BandoListaType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ConsulenteCollaboratoreType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ConsulentiCollaboratoriOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioBandoOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioBandoType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioContrattoOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioContrattoType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DocumentiBeneficiarioOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DocumentiConsulentiCollaboratoriOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DocumentoAllegatoType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DocumentoBandoOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ElencoBandiOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.EsitoProspettoBeneficiariType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.FileType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoBeneficiariOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoContrattiOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoContrattoType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.VersionOutType;
+import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.*;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.dao.DataAccessException;
+import java.util.stream.Collectors;
 
 /**
  * Centralizzazione della logica delle chiamate del web service
  * 
  * @author Stefano.Sabbadin
  */
+@Component
 public class BandiEsitiAvvisiFacade {
 
-	Logger logger = Logger.getLogger(BandiEsitiAvvisiFacade.class);
+	private static final Logger logger = LoggerFactory.getLogger(BandiEsitiAvvisiFacade.class);
 
-	private String obbStazioneAppaltante;
-
+	@Autowired
 	private BandiEsitiAvvisiManager bandiManager;
 
 	/**
 	 * Token di autenticazione fissato dall'applicativo se da richiedere ad ogni
 	 * chiamata del servizio, null o stringa vuota altrimenti
 	 */
+	@Resource
 	private String authenticationToken;
 
 	/** Template link per l'apertura dell'elenco documenti beneficiario. */
+	@Resource
 	private String templateLinkBeneficiari;
 	
 	/** Template link per l'apertura dell'elenco documenti consulente. */
-	private String templateLinkConsulenti;
+	@Resource
+	private String obbStazioneAppaltante;
 
-	
-	public void setBandiManager(BandiEsitiAvvisiManager bandiManager) {
-		this.bandiManager = bandiManager;
-	}
-
-	public void setAuthenticationToken(String authenticationToken) {
-		this.authenticationToken = StringUtils.stripToNull(authenticationToken);
-	}
-
-	public void setObbStazioneAppaltante(String obbStazioneAppaltante){
-		this.obbStazioneAppaltante = StringUtils.stripToNull(obbStazioneAppaltante);
-	}
-
-	public void setTemplateLinkBeneficiari(String templateLinkBeneficiari) {
-		this.templateLinkBeneficiari = templateLinkBeneficiari;
+	/**
+	 * Aggiunto perch√® con authenticationToken cercava di farmi il controllo sul token, 
+	 * quindi, aggiunto script ovunque per sicurezza
+	 */
+	@PostConstruct
+	private void stripToNull() {
+		authenticationToken = StringUtils.stripToNull(authenticationToken);
+		templateLinkBeneficiari = StringUtils.stripToNull(templateLinkBeneficiari);
+		obbStazioneAppaltante = StringUtils.stripToNull(obbStazioneAppaltante);
 	}
 	
-	public void setTemplateLinkConsulenti(String templateLinkConsulenti) {
-		this.templateLinkConsulenti = templateLinkConsulenti;
-	}
-
 	/**
 	 * Ritorna la versione del servizio
 	 * 
 	 * @return versione del servizio
 	 */
 	public VersionOutType getVersion() {
-		if (logger.isDebugEnabled()) {
-			logger.debug("version(): inizio metodo");
-		}
-		
+		logger.debug("version(): inizio metodo");
+
 		VersionOutType risultato = new VersionOutType();
 		
 		try {
@@ -106,15 +82,14 @@ public class BandiEsitiAvvisiFacade {
 			String appPath = (path != null ? path[0] : "");	
 			appPath = appPath.replaceAll("%20", "\\ ");
 			
-		    BufferedReader br = new BufferedReader(new FileReader(new File(appPath + "/WEB-INF/WSBEA_VER.TXT")));
-		    String version = "";
-	        String s;
-	        while((s = br.readLine()) != null) {
-	        	if(s != null) {
+		    try (BufferedReader br = new BufferedReader(new FileReader(appPath + "/WEB-INF/WSBEA_VER.TXT"))) {
+			    String version = "";
+		        String s = null;
+		        while((s = br.readLine()) != null)
 	        		version += s + "\n";
-	        	}
-	        }	
-			risultato.setVersion(version);
+		        
+				risultato.setVersion(version);
+		    }
 		} catch (Exception e) {
 			logger.error(
 					"Errore inaspettato durante l'interazione con la base dati",
@@ -122,8 +97,7 @@ public class BandiEsitiAvvisiFacade {
 			risultato.setErrore(e.getMessage());
 		} 
 		
-		if (logger.isDebugEnabled())
-			logger.debug("version: fine metodo");
+		logger.debug("version: fine metodo");
 
 		return risultato;
 	}
@@ -164,12 +138,8 @@ public class BandiEsitiAvvisiFacade {
 			String contratto, Date dataPubblicazioneDa,
 			Date dataPubblicazioneA, String cig, String codiceStazAppaltante) {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("elencoBandi(" + token + "," + tipo + "," + contratto
-					+ "," + dataPubblicazioneDa + "," + dataPubblicazioneA
-					+ "," + cig + "," + codiceStazAppaltante
-					+ "): inizio metodo");
-		}
+		logger.debug("elencoBandi({},{},{},{},{},{},{}): inizio metodo"
+				, token, tipo, contratto, dataPubblicazioneDa, dataPubblicazioneA, cig, codiceStazAppaltante);
 
 		// conversione a null di eventuali parametri vuoti
 		token = StringUtils.stripToNull(token);
@@ -207,7 +177,7 @@ public class BandiEsitiAvvisiFacade {
 			continua = false;
 		}
 
-		//controlli su obbligatoriet‡ stazione appaltante
+		//controlli su obbligatoriet√† stazione appaltante
 		if(continua){
 			if(StringUtils.isEmpty(this.obbStazioneAppaltante)){
 				risultato.setErrore("Parametro obbligatorieta' stazione appaltante non configurato");
@@ -222,18 +192,23 @@ public class BandiEsitiAvvisiFacade {
 
 		if(continua) {
 			if (this.authenticationToken != null && logger.isInfoEnabled())
-				logger.info("Lista bandi richiesta per la stazione appaltante "
-						+ codiceStazAppaltante);
+				logger.info("Lista bandi richiesta per la stazione appaltante {}", codiceStazAppaltante);
 			// se i parametri sono corretti, si procede con l'inoltro della
 			// chiamata
 			try {
 				List<BandoListaType> elencoBandi = this.bandiManager
 						.getElencoBandi(tipo, contratto, dataPubblicazioneDa,
 								dataPubblicazioneA, cig, codiceStazAppaltante);
-				risultato
-				.setBando(elencoBandi.toArray(new BandoListaType[] {}));
-				risultato.setNumBandi(new Integer(elencoBandi.size()));
+				risultato.setBando(elencoBandi.toArray(new BandoListaType[0]));
+				risultato.setNumBandi(elencoBandi.size());
 			} catch (DataAccessException e) {
+				logWithUndefinedNumberOfParameters("getElencoBandi({})"
+						, tipo
+						, contratto
+						, dataPubblicazioneDa
+						, dataPubblicazioneA
+						, cig
+						, codiceStazAppaltante);
 				logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
@@ -241,8 +216,7 @@ public class BandiEsitiAvvisiFacade {
 			}
 		}
 
-		if (logger.isDebugEnabled())
-			logger.debug("elencoBandi: fine metodo");
+		logger.debug("elencoBandi: fine metodo");
 
 		return risultato;
 	}
@@ -281,12 +255,9 @@ public class BandiEsitiAvvisiFacade {
 	public ElencoBandiOutType getElencoBandiScaduti(String token, String tipo,
 			String contratto, Date dataPubblicazioneDa,
 			Date dataPubblicazioneA, String cig, String codiceStazAppaltante) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("elencoBandiScaduti(" + token + "," + tipo + ","
-					+ contratto + "," + dataPubblicazioneDa + ","
-					+ dataPubblicazioneA + "," + cig + ","
-					+ codiceStazAppaltante + "): inizio metodo");
-		}
+		logger.debug("elencoBandiScaduti({},{},{},{},{},{},{}): inizio metodo"
+				, token, tipo, contratto, dataPubblicazioneDa, dataPubblicazioneA
+				, cig, codiceStazAppaltante);
 
 		// conversione a null di eventuali parametri vuoti
 		token = StringUtils.stripToNull(token);
@@ -322,7 +293,7 @@ public class BandiEsitiAvvisiFacade {
 			continua = false;
 		}
 
-		//controlli su obbligatoriet‡ stazione appaltante
+		//controlli su obbligatoriet√† stazione appaltante
 		if(continua){
 			if(StringUtils.isEmpty(this.obbStazioneAppaltante)){
 				risultato.setErrore("Parametro obbligatorieta' stazione appaltante non configurato");
@@ -334,7 +305,7 @@ public class BandiEsitiAvvisiFacade {
 				continua = false;
 			}
 		}
-		//controlli su obbligatoriet‡ stazione appaltante
+		//controlli su obbligatoriet√† stazione appaltante
 		if(continua){
 			if(StringUtils.isEmpty(this.obbStazioneAppaltante)){
 				risultato.setErrore("Parametro obbligatorieta' stazione appaltante non configurato");
@@ -349,8 +320,7 @@ public class BandiEsitiAvvisiFacade {
 
 		if(continua) {
 			if (this.authenticationToken != null && logger.isInfoEnabled())
-				logger.info("Lista bandi scaduti richiesta per la stazione appaltante "
-						+ codiceStazAppaltante);
+				logger.info("Lista bandi scaduti richiesta per la stazione appaltante {}", codiceStazAppaltante);
 
 			// se i parametri sono corretti, si procede con l'inoltro della
 			// chiamata
@@ -360,18 +330,25 @@ public class BandiEsitiAvvisiFacade {
 								dataPubblicazioneDa, dataPubblicazioneA, cig,
 								codiceStazAppaltante);
 				risultato
-				.setBando(elencoBandi.toArray(new BandoListaType[] {}));
-				risultato.setNumBandi(new Integer(elencoBandi.size()));
+				.setBando(elencoBandi.toArray(new BandoListaType[0]));
+				risultato.setNumBandi(elencoBandi.size());
 			} catch (DataAccessException e) {
-				logger.error(
+				logWithUndefinedNumberOfParameters("getDocumentiBando({})"
+						, tipo
+						, contratto
+						, dataPubblicazioneDa
+						, dataPubblicazioneA
+						, cig
+						, codiceStazAppaltante);
+
+						logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
 				risultato.setErrore(e.getMessage());
 			}
 		}
 
-		if (logger.isDebugEnabled())
-			logger.debug("elencoBandiScaduti: fine metodo");
+		logger.debug("elencoBandiScaduti: fine metodo");
 
 		return risultato;
 	}
@@ -390,9 +367,7 @@ public class BandiEsitiAvvisiFacade {
 	 */
 	public DettaglioBandoOutType getDettaglioBando(String token, String codice,
 			String tipo) {
-		if (logger.isDebugEnabled())
-			logger.debug("dettaglioBando(" + codice + ", " + tipo
-					+ "): inizio metodo");
+		logger.debug("dettaglioBando({}, {}): inizio metodo", codice, tipo);
 
 		DettaglioBandoOutType risultato = new DettaglioBandoOutType();
 
@@ -413,12 +388,15 @@ public class BandiEsitiAvvisiFacade {
 			try {
 				List<DettaglioBandoType> bando = this.bandiManager.getBando(
 						codice, tipo);
-				risultato.setBando(bando.toArray(new DettaglioBandoType[] {}));
+				risultato.setBando(bando.toArray(new DettaglioBandoType[0]));
 				List<DocumentoAllegatoType> doc = this.bandiManager
 						.getDocumentiBando(codice, tipo);
 				risultato.setDocumento(doc
-						.toArray(new DocumentoAllegatoType[] {}));
+						.toArray(new DocumentoAllegatoType[0]));
 			} catch (DataAccessException e) {
+				logWithUndefinedNumberOfParameters("getDocumentiBando({})"
+						, codice
+						, tipo);
 				logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
@@ -426,8 +404,7 @@ public class BandiEsitiAvvisiFacade {
 			}
 		}
 
-		if (logger.isDebugEnabled())
-			logger.debug("dettaglioBando: fine metodo");
+		logger.debug("dettaglioBando: fine metodo");
 
 		return risultato;
 	}
@@ -447,9 +424,7 @@ public class BandiEsitiAvvisiFacade {
 	 */
 	public DocumentoBandoOutType getDocumentoBando(String token, String codice,
 			String tipo, int id) {
-		if (logger.isDebugEnabled())
-			logger.debug("documentoBando(" + codice + ", " + tipo + "," + id
-					+ "): inizio metodo");
+		logger.debug("documentoBando({}, {}, {}, {}): inizio metodo", token, codice, tipo, id);
 
 		// conversione a null di eventuali parametri vuoti
 		token = StringUtils.stripToNull(token);
@@ -472,6 +447,10 @@ public class BandiEsitiAvvisiFacade {
 						codice, tipo, id);
 				risultato.setFile(file);
 			} catch (DataAccessException e) {
+				logWithUndefinedNumberOfParameters("downloadDocumentoBando({})"
+						, codice
+						, tipo
+						, id);
 				logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
@@ -479,8 +458,7 @@ public class BandiEsitiAvvisiFacade {
 			}
 		}
 
-		if (logger.isDebugEnabled())
-			logger.debug("documentoBando: fine metodo");
+		logger.debug("documentoBando: fine metodo");
 
 		return risultato;
 	}
@@ -501,10 +479,7 @@ public class BandiEsitiAvvisiFacade {
 	 */
 	public ProspettoBeneficiariOutType getProspettoBeneficiari(String token,
 			Date dataAffidamentoDa, Date dataAffidamentoA) {
-		if (logger.isDebugEnabled())
-			logger.debug("prospettoBeneficiari(" + token + ","
-					+ dataAffidamentoDa + "," + dataAffidamentoA
-					+ "): inizio metodo");
+		logger.debug("prospettoBeneficiari({}, {}, {}): inizio metodo", token, dataAffidamentoDa, dataAffidamentoA);
 
 		ProspettoBeneficiariOutType risultato = new ProspettoBeneficiariOutType();
 
@@ -524,10 +499,9 @@ public class BandiEsitiAvvisiFacade {
 				risultato
 				.setErrore("Parametro token non impostato o non valido");
 			} else {
-				if (this.authenticationToken != null && logger.isInfoEnabled()) {
-					logger.info("Lista esiti richiesta per il prospetto beneficiari secondo l'art. 18 DLgs 83/2012: da data="
-							+ dataAffidamentoDa + " a data=" + dataAffidamentoA);
-				}
+				if (this.authenticationToken != null && logger.isInfoEnabled())
+					logger.info("Lista esiti richiesta per il prospetto beneficiari secondo l'art. 18 DLgs 83/2012: da data= {} a data={}"
+							, dataAffidamentoDa, dataAffidamentoA);
 				// se i parametri sono corretti, si procede con l'inoltro della
 				// chiamata
 				try {
@@ -535,14 +509,15 @@ public class BandiEsitiAvvisiFacade {
 							.getProspettoBeneficiari(dataAffidamentoDa,
 									dataAffidamentoA);
 					risultato.setEsito(elencoEsiti
-							.toArray(new EsitoProspettoBeneficiariType[] {}));
-					risultato.setNumEsiti(new Integer(elencoEsiti.size()));
+							.toArray(new EsitoProspettoBeneficiariType[0]));
+					risultato.setNumEsiti(elencoEsiti.size());
 					if (this.authenticationToken != null
-							&& logger.isInfoEnabled()) {
-						logger.info("Prospetto beneficiari: estratti "
-								+ risultato.getNumEsiti() + " record");
-					}
+							&& logger.isInfoEnabled())
+						logger.info("Prospetto beneficiari: estratti {} record", risultato.getNumEsiti());
 				} catch (DataAccessException e) {
+					logWithUndefinedNumberOfParameters("downloadDocumentiBeneficiario({})"
+							, dataAffidamentoDa
+							, dataAffidamentoA);
 					logger.error(
 							"Errore inaspettato durante l'interazione con la base dati",
 							e);
@@ -569,9 +544,7 @@ public class BandiEsitiAvvisiFacade {
 	 */
 	public DocumentiBeneficiarioOutType getDocumentiBeneficiario(String token,
 			String codice, String codiceBeneficiario) {
-		if (logger.isDebugEnabled())
-			logger.debug("documentiBeneficiario(" + token + "," + codice + ","
-					+ codiceBeneficiario + "): inizio metodo");
+		logger.debug("documentiBeneficiario({}, {}, {}): inizio metodo", token, codice, codiceBeneficiario);
 
 		DocumentiBeneficiarioOutType risultato = new DocumentiBeneficiarioOutType();
 
@@ -591,8 +564,8 @@ public class BandiEsitiAvvisiFacade {
 				.setErrore("Parametro token non impostato o non valido");
 			} else {
 				if (this.authenticationToken != null && logger.isInfoEnabled()) {
-					logger.info("Lista documenti allegati per il prospetto beneficiari secondo l'art. 18 DLgs 83/2012: codice="
-							+ codice);
+					logger.info("Lista documenti allegati per il prospetto beneficiari secondo l'art. 18 DLgs 83/2012: codice={}"
+							, codice);
 				}
 				// se i parametri sono corretti, si procede con l'inoltro della
 				// chiamata
@@ -601,13 +574,15 @@ public class BandiEsitiAvvisiFacade {
 							.downloadDocumentiBeneficiario(codice,
 									codiceBeneficiario);
 					risultato.setDocumento(elencoFile
-							.toArray(new FileType[] {}));
+							.toArray(new FileType[0]));
 					if (this.authenticationToken != null
 							&& logger.isInfoEnabled()) {
-						logger.info("Documenti beneficiario: estratti "
-								+ elencoFile.size() + " record");
+						logger.info("Documenti beneficiario: estratti {} record", elencoFile.size());
 					}
 				} catch (DataAccessException e) {
+					logWithUndefinedNumberOfParameters("downloadDocumentiBeneficiario({})"
+							, codice
+							, codiceBeneficiario);
 					logger.error(
 							"Errore inaspettato durante l'interazione con la base dati",
 							e);
@@ -625,10 +600,8 @@ public class BandiEsitiAvvisiFacade {
 			String token, int anno, String cig, String proponente,
 			String oggetto, 
 			String partecipante, String aggiudicatario) {
-		if (logger.isDebugEnabled())
-			logger.debug("prospettoGareContrattiAnticorruzione(" + token + ","
-					+ anno + "," + cig + "," + proponente + "," + oggetto
-					+ "," + partecipante + "," + aggiudicatario + "): inizio metodo");
+		logger.debug("prospettoGareContrattiAnticorruzione({}, {}, {}, {}, {}, {}, {}): inizio metodo"
+				,token, anno, cig, proponente, oggetto, partecipante, aggiudicatario);
 
 		ProspettoGareContrattiAnticorruzioneOutType risultato = new ProspettoGareContrattiAnticorruzioneOutType();
 
@@ -642,19 +615,11 @@ public class BandiEsitiAvvisiFacade {
 			risultato
 			.setErrore("Parametro token non impostato o non valido");
 		} else {
-			if (this.authenticationToken != null && logger.isInfoEnabled()) {
-				logger.info("Lista esiti richiesta per il prospetto gare contratti secondo l'art. 1 Legge 190/2012: anno="
-						+ anno
-						+ ", cig="
-						+ cig
-						+ ", proponente="
-						+ proponente
-						+ ", oggetto="
-						+ oggetto
-						+ ", partecipante="
-						+ partecipante
-						+ ", aggiudicatario=" + aggiudicatario);
-			}
+			if (this.authenticationToken != null && logger.isInfoEnabled()) 
+				logger.info("Lista esiti richiesta per il prospetto gare contratti secondo l'art. 1 Legge 190/2012: "
+						+ "anno={}, cig={}, oggetto={}, partecipante={}, aggiudicatario={}"
+						, anno, cig, proponente, oggetto, partecipante);
+			
 			// se i parametri sono corretti, si procede con l'inoltro della
 			// chiamata
 			try {
@@ -663,14 +628,19 @@ public class BandiEsitiAvvisiFacade {
 								oggetto, partecipante, aggiudicatario);
 				risultato
 				.setAppalto(elencoAppalti
-						.toArray(new AppaltoAggiudicatoAnticorruzioneType[] {}));
-				risultato.setNumAppaltiAggiudicati(new Integer(elencoAppalti.size()));
+						.toArray(new AppaltoAggiudicatoAnticorruzioneType[0]));
+				risultato.setNumAppaltiAggiudicati(elencoAppalti.size());
 				if (this.authenticationToken != null
-						&& logger.isInfoEnabled()) {
-					logger.info("Prospetto gare e contratti: estratti "
-							+ risultato.getNumAppaltiAggiudicati() + " record");
-				}
+						&& logger.isInfoEnabled())
+					logger.info("Prospetto gare e contratti: estratti {} record", risultato.getNumAppaltiAggiudicati());
 			} catch (DataAccessException e) {
+				logWithUndefinedNumberOfParameters("getProspettoContratti({})"
+						, anno
+						, cig
+						, proponente
+						, oggetto
+						, partecipante
+						, aggiudicatario);
 				logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
@@ -683,11 +653,9 @@ public class BandiEsitiAvvisiFacade {
 		return risultato;
 	}
 
-	public AdempimentoAnticorruzioneOutType getAdempimentiAnticorruzione(String token,Integer anno){
+	public AdempimentoAnticorruzioneOutType getAdempimentiAnticorruzione(String token, Integer anno){
 		
-		if (logger.isDebugEnabled())
-			logger.debug("adempimentiAnticorruzione(" + token + ","
-					+ anno + "): inizio metodo");
+		logger.debug("adempimentiAnticorruzione({}, {}): inizio metodo", token, anno);
 
 		AdempimentoAnticorruzioneOutType risultato = new AdempimentoAnticorruzioneOutType(); 
 		// conversione a null di eventuali parametri vuoti
@@ -700,12 +668,11 @@ public class BandiEsitiAvvisiFacade {
 			risultato
 			.setErrore("Parametro token non impostato o non valido");
 		} else {
-			if (this.authenticationToken != null && logger.isInfoEnabled()) {
-				logger.info("Lista adempimenti secondo l'art. 1 Legge 190/2012: anno="+ anno);
-			}
+			if (this.authenticationToken != null && logger.isInfoEnabled())
+				logger.info("Lista adempimenti secondo l'art. 1 Legge 190/2012: anno={}", anno);
 			List<AdempimentoAnticorruzioneType> adempimenti = this.bandiManager.getAdempimentiAnticorruzione(anno);
-			risultato.setAdempimento(adempimenti.toArray(new AdempimentoAnticorruzioneType[] {}));
-			risultato.setNumAdempimenti(new Integer(adempimenti.size()));	
+			risultato.setAdempimento(adempimenti.toArray(new AdempimentoAnticorruzioneType[0]));
+			risultato.setNumAdempimenti(adempimenti.size());
 		}
 		
 		logger.debug("adempimentiAnticorruzione: fine metodo");
@@ -715,14 +682,9 @@ public class BandiEsitiAvvisiFacade {
 
 	public ProspettoContrattiOutType getProspettoContratti(String token, String cig, String stazioneAppaltante, String oggetto, String tipologiaContratto, String partecipante, String aggiudicatario, Date dataPubblicazioneEsitoDa, Date dataPubblicazioneEsitoA){
 		
-		if (logger.isDebugEnabled()) {
-			logger.debug("prospettoContratti(" + token + "," + cig + ","
-					+ stazioneAppaltante + "," + oggetto + ","
-					+ tipologiaContratto + "," + partecipante + ","
-					+ aggiudicatario + "," + dataPubblicazioneEsitoDa + ","
-					+ dataPubblicazioneEsitoA + "): inizio metodo");
-		}
-		
+		logger.debug("prospettoContratti({}, {}, {}, {}, {}, {}, {}, {}, {}): inizio metodo"
+				, token, cig, stazioneAppaltante, oggetto, tipologiaContratto, partecipante, aggiudicatario
+				, dataPubblicazioneEsitoDa, dataPubblicazioneEsitoA);
 		
 		ProspettoContrattiOutType risultato = new ProspettoContrattiOutType();
 
@@ -733,27 +695,24 @@ public class BandiEsitiAvvisiFacade {
 			risultato
 			.setErrore("Parametro token non impostato o non valido");
 		} else {
-			if (this.authenticationToken != null && logger.isInfoEnabled()) {
-				logger.info("Lista contratti: cig="
-						+ cig
-						+ ", stazioneAppaltante="
-						+ stazioneAppaltante
-						+ ", oggetto="
-						+ oggetto
-						+ ", tipologiaContratto="
-						+ tipologiaContratto
-						+ ", partecipante=" 
-						+ partecipante 
-						+ ", aggiudicatario="
-						+ aggiudicatario
-						+ ", dataPubblicazioneEsitoDa=" + dataPubblicazioneEsitoDa
-						+ ", dataPubblicazioneEsitoA=" + dataPubblicazioneEsitoA);
-			}
+			if (this.authenticationToken != null && logger.isInfoEnabled())
+				logger.info("Lista contratti: cig={}, stazioneAppaltante={}, oggetto={}, tipologiaContratto={}, "
+						+ "partecipante={}, aggiudicatario={}, dataPubblicazioneEsitoDa={}, dataPubblicazioneEsitoA={}"
+						, cig, stazioneAppaltante, oggetto, tipologiaContratto, partecipante, aggiudicatario, dataPubblicazioneEsitoDa, dataPubblicazioneEsitoA);
 
 			try{
 				List<ProspettoContrattoType> contratti = this.bandiManager.getProspettoContratti(cig, stazioneAppaltante, oggetto, tipologiaContratto, partecipante, aggiudicatario, dataPubblicazioneEsitoDa, dataPubblicazioneEsitoA);
-				risultato.setContratto(contratti.toArray(new ProspettoContrattoType[] {}));
+				risultato.setContratto(contratti.toArray(new ProspettoContrattoType[0]));
 			} catch (DataAccessException e) {
+				logWithUndefinedNumberOfParameters("getProspettoContratti({})"
+						, cig
+						, stazioneAppaltante
+						, oggetto
+						, tipologiaContratto
+						, partecipante
+						, aggiudicatario
+						, dataPubblicazioneEsitoDa
+						, dataPubblicazioneEsitoA);
 				logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
@@ -767,9 +726,7 @@ public class BandiEsitiAvvisiFacade {
 
 	public DettaglioContrattoOutType getDettaglioContratto(String token, String codice){
 		
-		if (logger.isDebugEnabled())
-			logger.debug("dettaglioContratto(" + token + ","
-					+ codice + "): inizio metodo");
+		logger.debug("dettaglioContratto({}, {}): inizio metodo", token, codice);
 		
 		DettaglioContrattoOutType risultato = new DettaglioContrattoOutType();
 
@@ -783,20 +740,20 @@ public class BandiEsitiAvvisiFacade {
 			risultato.setErrore("Parametro codice non valorizzato");
 			logger.error("Parametro codice non valorizzato");
 		} else {
-			if (this.authenticationToken != null && logger.isInfoEnabled()) {
-				logger.info("Lista contratti: codice=" + codice);
-			}
+			if (this.authenticationToken != null && logger.isInfoEnabled())
+				logger.info("Lista contratti: codice={}", codice);
 
 			try{
 				DettaglioContrattoType dettaglioContratto = this.bandiManager.getDettaglioContratto(codice);
 				risultato.setDettaglioContratto(dettaglioContratto);
 			} catch (DataAccessException e) {
+				logWithUndefinedNumberOfParameters("getDettaglioContratto({})", codice);
 				logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
 				risultato.setErrore(e.getMessage());
-			} 
-			catch (RuntimeException e) {
+			} catch (RuntimeException e) {
+				logWithUndefinedNumberOfParameters("getDettaglioContratto({})", codice);
 				logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
@@ -819,13 +776,8 @@ public class BandiEsitiAvvisiFacade {
 			Double compensoPrevistoDa, 
 			Double compensoPrevistoA) 
 	{	
-		if (logger.isDebugEnabled())
-			logger.debug("getConsulentiCollaboratori(" + token + ","
-					+ stazioneAppaltante + ","
-					+ soggettoPercettore + ","
-					+ dataDa + "," + dataA + ","
-					+ ragioneIncarico + ","
-					+ compensoPrevistoDa + "," + compensoPrevistoA + "): inizio metodo");
+		logger.debug("getConsulentiCollaboratori({}, {}, {}, {}, {}, {}, {}, {}): inizio metodo"
+				, token, stazioneAppaltante, soggettoPercettore, dataDa, dataA, ragioneIncarico, compensoPrevistoDa, compensoPrevistoA);
 		
 		// conversione a null di eventuali parametri vuoti
 		token = StringUtils.stripToNull(token);
@@ -859,12 +811,21 @@ public class BandiEsitiAvvisiFacade {
 						compensoPrevistoA);
 								
 				if(elenco != null) {
-					risultato.setConsulentiCollaboratori(elenco.toArray(new ConsulenteCollaboratoreType[] {}));
+					risultato.setConsulentiCollaboratori(elenco.toArray(new ConsulenteCollaboratoreType[0]));
 				} else {
-					risultato.setConsulentiCollaboratori(new ConsulenteCollaboratoreType[] {});
+					risultato.setConsulentiCollaboratori(new ConsulenteCollaboratoreType[0]);
 				}
-				risultato.setNumConsulentiCollaboratori(new Integer(elenco.size()));
+				risultato.setNumConsulentiCollaboratori(elenco.size());
 			} catch (DataAccessException e) {
+				logWithUndefinedNumberOfParameters("getConsulentiCollaboratori({})",
+						  stazioneAppaltante
+						, soggettoPercettore
+						, dataDa
+						, dataA
+						, ragioneIncarico
+						, compensoPrevistoDa
+						, compensoPrevistoA);
+
 				logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
@@ -872,16 +833,14 @@ public class BandiEsitiAvvisiFacade {
 			}
 		}
 
-		if (logger.isDebugEnabled())
-			logger.debug("getConsulentiCollaboratori: fine metodo");
+		logger.debug("getConsulentiCollaboratori: fine metodo");
 
 		return risultato;
 	}
 	
 	public DocumentiConsulentiCollaboratoriOutType getDocumentiConsulentiCollaboratori(String token, String codice, String codiceSoggetto) {
-		if (logger.isDebugEnabled())
-			logger.debug("documentiConsulentiCollaboratori(" + 
-					token + "," + codice + "," + codiceSoggetto + "): inizio metodo");
+		logger.debug("documentiConsulentiCollaboratori({}, {}, {}): inizio metodo"
+				, token, codice, codiceSoggetto);
 
 		// conversione a null di eventuali parametri vuoti
 		token = StringUtils.stripToNull(token);
@@ -899,11 +858,11 @@ public class BandiEsitiAvvisiFacade {
 		} else {
 			try {
 				List<FileType> elencoFile = this.bandiManager.downloadDocumentiConsulentiCollaboratori(codice, codiceSoggetto);
-				risultato.setDocumento(elencoFile.toArray(new FileType[] {}));
-				if (this.authenticationToken != null && logger.isInfoEnabled()) {
-					logger.info("Documenti consulenti collaboratori: estratti " + elencoFile.size() + " record");
-				}
+				risultato.setDocumento(elencoFile.toArray(new FileType[0]));
+				if (this.authenticationToken != null && logger.isInfoEnabled())
+					logger.info("Documenti consulenti collaboratori: estratti {} record", elencoFile.size());
 			} catch (DataAccessException e) {
+				logWithUndefinedNumberOfParameters("downloadDocumentiConsulentiCollaboratori", codice, codiceSoggetto);
 				logger.error(
 						"Errore inaspettato durante l'interazione con la base dati",
 						e);
@@ -911,10 +870,23 @@ public class BandiEsitiAvvisiFacade {
 			}
 		}
 
-		if (logger.isDebugEnabled())
-			logger.debug("documentiConsulentiCollaboratori: fine metodo");
+		logger.debug("documentiConsulentiCollaboratori: fine metodo");
 
 		return risultato;
+	}
+
+	/**
+	 *
+	 * @param message Ex: elencoBandi({}): inizio metodo
+	 * @param params parametri da visualizzare
+	 * chiamata: logWithUndefinedNumberOfParameters("elencoBandi({})", 1, "ciao");
+	 * Output: elencoBandi(1, ciao)
+	 */
+	private void logWithUndefinedNumberOfParameters(String message, Object ... params) {
+		String paramsToPrint = null;
+		if (params != null && params.length > 0)
+			paramsToPrint = Arrays.stream(params).map(param -> param == null ? "null" : param.toString()).collect(Collectors.joining(", "));
+		logger.error(message, paramsToPrint);
 	}
 
 }

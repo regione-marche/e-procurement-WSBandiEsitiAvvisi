@@ -13,8 +13,11 @@ package it.maggioli.eldasoft.appalti.bandiesitiavvisi.utils;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
@@ -22,6 +25,7 @@ import org.springframework.util.StringUtils;
  * 
  * @author Stefano.Sabbadin
  */
+@Component
 public class DBMSSpecs {
 
 	/** Costante che individua la tipologia di database Oracle. */
@@ -39,6 +43,7 @@ public class DBMSSpecs {
 	/**
 	 * Datasource di connessione al DB.
 	 */
+	@Autowired
 	private DataSource dataSource;
 
 	/** Nome commerciale del DBMS utilizzato. */
@@ -51,38 +56,26 @@ public class DBMSSpecs {
 	private String internalDbmsCode;
 
 	/**
-	 * Imposta il datasource e determina il tipo di DBMS utilizzato.
-	 * 
-	 * @param dataSource
-	 *            datasource di collegamento al db
-	 * 
+	 * Dopo che spring abbia valorizzato la variable dataSource, imposto le altre variabili dipendenti dal datasource.
 	 * @throws SQLException
 	 */
-	public void setDataSource(DataSource dataSource) throws SQLException {
-		Connection c = null;
-		try {
-			c = dataSource.getConnection();
+	@PostConstruct
+	public void initFields() throws SQLException {
+		try (Connection c = dataSource.getConnection()) {
 			this.productName = c.getMetaData().getDatabaseProductName();
 			this.productVersion = c.getMetaData().getDatabaseProductVersion();
-		} finally {
-			if (c != null) {
-				try {
-					c.close();
-				} catch (SQLException e) {
-				}
+			if ("Oracle".equalsIgnoreCase(productName)) {
+				this.internalDbmsCode = DBMSSpecs.DATABASE_ORACLE;
+			} else if ("Microsoft SQL Server".equalsIgnoreCase(productName)) {
+				this.internalDbmsCode = DBMSSpecs.DATABASE_SQL_SERVER;
+			} else if ("PostgreSQL".equalsIgnoreCase(productName)) {
+				this.internalDbmsCode = DBMSSpecs.DATABASE_POSTGRES;
+			} else if (StringUtils.startsWithIgnoreCase(productName, "DB2/")) {
+				this.internalDbmsCode = DBMSSpecs.DATABASE_DB2;
 			}
 		}
-		if ("Oracle".equalsIgnoreCase(productName)) {
-			this.internalDbmsCode = DBMSSpecs.DATABASE_ORACLE;
-		} else if ("Microsoft SQL Server".equalsIgnoreCase(productName)) {
-			this.internalDbmsCode = DBMSSpecs.DATABASE_SQL_SERVER;
-		} else if ("PostgreSQL".equalsIgnoreCase(productName)) {
-			this.internalDbmsCode = DBMSSpecs.DATABASE_POSTGRES;
-		} else if (StringUtils.startsWithIgnoreCase(productName, "DB2/")) {
-			this.internalDbmsCode = DBMSSpecs.DATABASE_DB2;
-		}
 	}
-
+	
 	/**
 	 * @return the dataSource
 	 */

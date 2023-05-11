@@ -2,7 +2,17 @@ package it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.tasks;
 
 import it.eldasoft.www.PortaleAlice.EsitoOutType;
 import it.eldasoft.www.PortaleAlice.PortaleAliceProxy;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.ServletContextAware;
 
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -12,59 +22,30 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.servlet.ServletContext;
+@Component
+public class GeneralRssFeedBandi implements ServletContextAware {
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.web.context.ServletContextAware;
+	private static final Logger logger = LoggerFactory.getLogger(GeneralRssFeedBandi.class);
 
-public class GeneralRssFeedBandi implements ServletContextAware{
-
-	Logger logger = Logger.getLogger(GeneralRssFeedBandi.class);
-
-	private static String ZIP_FILENAME = "feedRSS.zip";
+	private static final String ZIP_FILENAME = "feedRSS.zip";
+	
+	@Autowired
+	@Qualifier(value = "RssFeedBandi")
 	private AbstractRssFeedBandi rssBandi;
+	@Autowired
+	@Qualifier(value = "RssFeedBandiScaduti")
 	private AbstractRssFeedBandi rssBandiScaduti;
 
 	/** 
 	 * Path in cui salvare i feed RSS in caso non si scegliesse il path di default
 	 * **/
+	@Resource
 	private String areaShared;
+	@Resource
 	private String urlWSPortale;
 	
 	
 	private ServletContext context;
-
-	/**
-	 * @param rssBandi the rssBandi to set
-	 */
-	public void setRssBandi(AbstractRssFeedBandi rssBandi) {
-		this.rssBandi = rssBandi;
-	}
-
-	/**
-	 * @param rssBandiScaduti the rssBandiScaduti to set
-	 */
-	public void setRssBandiScaduti(AbstractRssFeedBandi rssBandiScaduti) {
-		this.rssBandiScaduti = rssBandiScaduti;
-	}
-
-	/**
-	 * @param areaShared
-	 *            the areaShared to set
-	 */
-	public void setAreaShared(String areaShared) {
-		this.areaShared = StringUtils.stripToNull(areaShared);
-	}
-
-
-	/**
-	 * @param urlWSPortale the urlWSPortale to set
-	 */
-	public void setUrlWSPortale(String urlWSPortale) {
-		this.urlWSPortale = StringUtils.stripToNull(urlWSPortale);
-	}
 
 	public void setServletContext(ServletContext context) {
 		this.context = context;
@@ -93,17 +74,17 @@ public class GeneralRssFeedBandi implements ServletContextAware{
 		logger.debug("refreshRssFeed: inizio metodo");
 		
 		// FASE 1 : Backup di tutti i file della struttura shared
-		// se tutto è andato bene mi troverò con una cartella di backup e una di destinazione per i feed
+		// se tutto Ã¨ andato bene mi troverÃ² con una cartella di backup e una di destinazione per i feed
 		esitoOK = backupShared();  
 
 		// FASE 2 : generazione dei feed
 		if (esitoOK) {
 			if (StringUtils.isNotEmpty(this.urlWSPortale)) {
-				// Creo l'oggetto zip in cui andare a inserire i file già pronti
+				// Creo l'oggetto zip in cui andare a inserire i file giï¿½ pronti
 				// per l'invio con la corretta alberatura
 				try {
 					ZipOutputStream zos = new ZipOutputStream(baos);
-					zipEntries = new ArrayList<String>();
+					zipEntries = new ArrayList<>();
 					// Setto il nome del file zip
 					zos.putNextEntry(new ZipEntry(ZIP_FILENAME));
 
@@ -116,13 +97,12 @@ public class GeneralRssFeedBandi implements ServletContextAware{
 					zos.close();
 				} catch (IOException e) {
 					esitoOK = false;
-					logger.error("Errore nella creazione dello zip : impossibile creare il file "
-							+ ZIP_FILENAME);
+					logger.error("Errore nella creazione dello zip : impossibile creare il file {}", ZIP_FILENAME);
 				}
 
 			} else {
 				// Nessuna integrazione con portale => restano scritti su file system
-				esitoOK = this.rssBandi.refreshRssFeed((ZipOutputStream)null, null) && this.rssBandiScaduti.refreshRssFeed((ZipOutputStream)null, null);
+				esitoOK = this.rssBandi.refreshRssFeed(null, null) && this.rssBandiScaduti.refreshRssFeed(null, null);
 			}
 		}
 
@@ -151,7 +131,7 @@ public class GeneralRssFeedBandi implements ServletContextAware{
 			try {
 				EsitoOutType esitoWS = proxy.uploadRssBandi(baos.toByteArray());
 				if (esitoWS.getCodiceErrore() != null) {
-					logger.error("Errore durante la chiamata al servizio portale appalti : " + esitoWS.getCodiceErrore()); 
+					logger.error("Errore durante la chiamata al servizio portale appalti : {}", esitoWS.getCodiceErrore()); 
 					esitoOK = false; 
 				}
 			} catch (RemoteException e) {
@@ -179,7 +159,7 @@ public class GeneralRssFeedBandi implements ServletContextAware{
 				// backup del contenuto rinominando il nome della cartella
 				dirBackup = new File(dirDestinazione.getPath()+"_"+"backup");
 				if (!dirDestinazione.renameTo(dirBackup)) {
-					logger.error("Impossibile spostare la cartella " + dirDestinazione.getPath() + " in " + dirBackup.getPath());
+					logger.error("Impossibile spostare la cartella {} in {}", dirDestinazione.getPath(), dirBackup.getPath());
 					esito = false;
 				} else {
 					// ricreo la referenza alla cartella destinazione, che ora

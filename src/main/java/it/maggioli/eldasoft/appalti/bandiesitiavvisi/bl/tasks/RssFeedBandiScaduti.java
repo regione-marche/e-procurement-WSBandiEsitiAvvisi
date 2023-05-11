@@ -11,7 +11,11 @@
 package it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.tasks;
 
 import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioBandoType;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -19,20 +23,37 @@ import java.util.List;
  * 
  * @author Stefano.Sabbadin
  */
+@Component(value = "RssFeedBandiScaduti")
 public class RssFeedBandiScaduti extends AbstractRssFeedBandi {
 
-	private Integer deltaGiorniBandiScaduti;
+	@Resource
+	private String deltaGiorniBandiScaduti;
+	@Resource
+	private String rssFilenameBandiScaduti;
+
+	@PostConstruct
+	private void init() {
+		setChannelDescription("Elenco dei bandi e avvisi di gara scaduti");
+		setChannelTitle("Bandi di gara scaduti");
+		setRssFilenameBandi(rssFilenameBandiScaduti);
+	}
 	
 	/**
 	 * @param deltaGiorniBandiScaduti the deltaGiorniBandiScaduti to set
 	 */
-	public void setDeltaGiorniBandiScaduti(Integer deltaGiorniBandiScaduti) {
+	public void setDeltaGiorniBandiScaduti(String deltaGiorniBandiScaduti) {
 		this.deltaGiorniBandiScaduti = deltaGiorniBandiScaduti;
 	}
 
 	@Override
 	public List<DettaglioBandoType> getElencoBandi(String codiceFiscaleAmministrazione) {
-		return this.getBandiManager().getElencoDettagliBandiScaduti(null, null, null, null, null, codiceFiscaleAmministrazione, deltaGiorniBandiScaduti);
+		Integer delta = null;
+		try {
+			if (StringUtils.isNotEmpty(deltaGiorniBandiScaduti))
+				delta = Integer.parseInt(deltaGiorniBandiScaduti);
+		} catch (NumberFormatException e) {
+		}
+		return bandiManager.getElencoDettagliBandiScaduti(null, null, null, null, null, codiceFiscaleAmministrazione, delta);
 	}
-
+	
 }

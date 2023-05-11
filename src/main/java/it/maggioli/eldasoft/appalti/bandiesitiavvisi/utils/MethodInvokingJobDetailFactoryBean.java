@@ -11,15 +11,15 @@
 package it.maggioli.eldasoft.appalti.bandiesitiavvisi.utils;
 
 import it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.QuartzLockManager;
+import it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.tasks.GeneralRssFeedBandi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 // SORGENTE COPIATO DA it.eldasoft.gene.commons.web.spring.MethodInvokingJobDetailFactoryBean
 /**
@@ -30,30 +30,30 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * 
  * @author Stefano.Sabbadin
  */
-public class MethodInvokingJobDetailFactoryBean
-		extends
-		org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean {
+@Component
+public class MethodInvokingJobDetailFactoryBean {
 
-	Logger logger = Logger.getLogger(MethodInvokingJobDetailFactoryBean.class);
+	private static final Logger logger = LoggerFactory.getLogger(MethodInvokingJobDetailFactoryBean.class);
 
-	@Override
-	public Object invoke() throws InvocationTargetException,
-			IllegalAccessException {
+	@Autowired
+	private QuartzLockManager quartzLockManager;
+	@Autowired
+	private GeneralRssFeedBandi generalRssFeedBandi;
+
+	/**
+	 * Questo metodo viene fatto partire ogni volta che c'è un match con la cron specificata nel bean rssQuartzCronExpression
+	 * che nel nostro caso è un Environment del context del tomcat.
+	 */
+	@Scheduled(cron = "#{@rssQuartzCronExpression}")
+	public void invoke() {
 		// si cerca di ottenere il nome del package+classe puro, e non il proxy
 		// transazionale costruito da spring, altrimenti potrei non gestire
 		// correttamente la mutua esclusione se il nome generato in altri nodi
 		// risulta diverso
-		String jobClass = StringUtils.substringBefore(this.getTargetObject()
-				.getClass().getName(), "$$");
-		String jobMethod = this.getTargetMethod();
-		logger.debug("invoke(): inizio metodo per invocare il metodo "
-				+ jobMethod + " sull'istanza di " + jobClass);
+		String jobMethod = "refreshRssFeed";
+		String jobClass = generalRssFeedBandi.getClass().getSimpleName();
+		logger.debug("invoke(): inizio metodo per invocare il metodo {} sull'istanza di {}", jobMethod, jobClass);
 
-		Object object = null;
-		ApplicationContext ctx = WebApplicationContextUtils
-				.getWebApplicationContext(SpringAppContext.getServletContext());
-		QuartzLockManager manager = (QuartzLockManager) ctx
-				.getBean("quartzLockManager");
 		String codapp = "WSBEA";
 
 		boolean locked = false;
@@ -70,25 +70,26 @@ public class MethodInvokingJobDetailFactoryBean
 			String node = System.getProperty("jvmRoute");
 
 			// tentare inserimento lock esclusivo
-			locked = manager.insertQuartzLock(codapp, jobClass, jobMethod,
+			locked = quartzLockManager.insertQuartzLock(codapp, jobClass, jobMethod,
 					server, node);
 			if (locked) {
+				logger.debug("I've locked the quartz lock");
 				// solo in caso di ottenimento del lock esclusivo si processa il
 				// task, altrimenti se lo sta facendo un altro nodo viene
 				// bypassata l'esecuzione
-				object = super.invoke();
-			}
+				generalRssFeedBandi.refreshRssFeed();
+			} else
+				logger.debug("Quartz lock has been already locked from someone");
 		} catch (UnknownHostException e) {
 			logger.error("Impossibile procedere all'esecuzione del task a causa di problemi di reperimento del nome server");
 		} finally {
 			if (locked) {
-				manager.deleteQuartzLock(codapp, jobClass, jobMethod);
+				quartzLockManager.deleteQuartzLock(codapp, jobClass, jobMethod);
+				logger.debug("I've deleted the lock that i put on the quartz lock");
 			}
 		}
 
 		logger.debug("invoke(): fine metodo");
-
-		return object;
 	}
-
+	
 }

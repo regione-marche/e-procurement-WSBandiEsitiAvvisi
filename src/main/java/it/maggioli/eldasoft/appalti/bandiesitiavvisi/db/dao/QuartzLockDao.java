@@ -1,5 +1,6 @@
 package it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.dao;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -38,7 +39,7 @@ public interface QuartzLockDao {
 	 *             lock gi&agrave; ottenuto da un altro nodo in esecuzione
 	 */
 	void insertQuartzLock(String codapp, String job, Date lockDate,
-			String server, String node);
+			String server, String node) throws SQLException;
 
 	/**
 	 * Rilascia il lock esclusivo sul task terminato.

@@ -535,7 +535,8 @@
 			<xsd:element name="GetProspettoGareContrattiAnticorruzione">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element maxOccurs="1" minOccurs="0" name="token" type="xsd:string">
+						<xsd:element maxOccurs="1" minOccurs="0"
+							name="token" type="xsd:string">
 							<xsd:annotation>
 								<xsd:documentation>
 									Token di autenticazione (se previsto
@@ -543,17 +544,29 @@
 								</xsd:documentation>
 							</xsd:annotation>
 						</xsd:element>
-						<xsd:element maxOccurs="1" minOccurs="1" name="anno" type="xsd:int">
+						<xsd:element maxOccurs="1" minOccurs="1"
+							name="anno" type="xsd:int">
 						</xsd:element>
-						<xsd:element maxOccurs="1" minOccurs="0" name="cig" type="xsd:string">
+						<xsd:element maxOccurs="1" minOccurs="0"
+							name="cig" type="xsd:string">
 						</xsd:element>
-						<xsd:element maxOccurs="1" minOccurs="0" name="proponente" type="xsd:string">
+						<xsd:element maxOccurs="1" minOccurs="0"
+							name="proponente" type="xsd:string">
 						</xsd:element>
-						<xsd:element maxOccurs="1" minOccurs="0" name="oggetto" type="xsd:string">
+						<xsd:element maxOccurs="1" minOccurs="0"
+							name="oggetto" type="xsd:string">
 						</xsd:element>
-						<xsd:element maxOccurs="1" minOccurs="0" name="partecipante" type="xsd:string">
+						<xsd:element maxOccurs="1" minOccurs="0"
+							name="partecipante" type="xsd:string">
 						</xsd:element>
-						<xsd:element maxOccurs="1" minOccurs="0" name="aggiudicatario" type="xsd:string">
+						<xsd:element maxOccurs="1" minOccurs="0"
+							name="aggiudicatario" type="xsd:string">
+						</xsd:element>
+						<xsd:element name="indicePrimoRecord"
+							type="xsd:int" maxOccurs="1" minOccurs="1">
+						</xsd:element>
+						<xsd:element name="maxNumRecord"
+							type="xsd:int" maxOccurs="1" minOccurs="1">
 						</xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>

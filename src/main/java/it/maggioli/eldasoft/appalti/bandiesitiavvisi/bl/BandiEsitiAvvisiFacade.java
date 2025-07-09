@@ -599,9 +599,9 @@ public class BandiEsitiAvvisiFacade {
 	public ProspettoGareContrattiAnticorruzioneOutType getProspettoGareContrattiAnticorruzione(
 			String token, int anno, String cig, String proponente,
 			String oggetto, 
-			String partecipante, String aggiudicatario) {
-		logger.debug("prospettoGareContrattiAnticorruzione({}, {}, {}, {}, {}, {}, {}): inizio metodo"
-				,token, anno, cig, proponente, oggetto, partecipante, aggiudicatario);
+			String partecipante, String aggiudicatario, int indicePrimoRecord, int maxNumRecord) {
+		logger.debug("prospettoGareContrattiAnticorruzione({}, {}, {}, {}, {}, {}, {}, {}, {}): inizio metodo"
+				,token, anno, cig, proponente, oggetto, partecipante, aggiudicatario, indicePrimoRecord, maxNumRecord);
 
 		ProspettoGareContrattiAnticorruzioneOutType risultato = new ProspettoGareContrattiAnticorruzioneOutType();
 
@@ -623,13 +623,16 @@ public class BandiEsitiAvvisiFacade {
 			// se i parametri sono corretti, si procede con l'inoltro della
 			// chiamata
 			try {
-				List<AppaltoAggiudicatoAnticorruzioneType> elencoAppalti = this.bandiManager
-						.getProspettoGareContrattiAnticorruzione(anno, cig, proponente,
-								oggetto, partecipante, aggiudicatario);
-				risultato
-				.setAppalto(elencoAppalti
-						.toArray(new AppaltoAggiudicatoAnticorruzioneType[0]));
-				risultato.setNumAppaltiAggiudicati(elencoAppalti.size());
+				risultato.setNumAppaltiAggiudicati(bandiManager.countProspettoGareContrattiAnticorruzione(
+						anno, cig, proponente,
+						oggetto, partecipante, aggiudicatario
+				));
+				if (risultato.getNumAppaltiAggiudicati() > 0) {
+					List<AppaltoAggiudicatoAnticorruzioneType> elencoAppalti = bandiManager
+							.getProspettoGareContrattiAnticorruzione(anno, cig, proponente,
+									oggetto, partecipante, aggiudicatario, indicePrimoRecord, maxNumRecord);
+					risultato.setAppalto(elencoAppalti.toArray(new AppaltoAggiudicatoAnticorruzioneType[0]));
+				}
 				if (this.authenticationToken != null
 						&& logger.isInfoEnabled())
 					logger.info("Prospetto gare e contratti: estratti {} record", risultato.getNumAppaltiAggiudicati());

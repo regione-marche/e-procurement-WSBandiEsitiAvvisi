@@ -12,22 +12,11 @@
 package it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.dao;
 
 import it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.vo.AppaltoAggiudicatoAnticorruzione;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.AdempimentoAnticorruzioneType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.BandoListaType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ConsulenteCollaboratoreType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DettaglioBandoType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.DocumentoAllegatoType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.EsitoProspettoBeneficiariType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.FileType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.OperatoreInvitatoType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.OperatoreType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.PartecipanteType;
-import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoContrattoType;
+import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.*;
+import org.springframework.dao.DataAccessException;
 
 import java.util.Date;
 import java.util.List;
-
-import org.springframework.dao.DataAccessException;
 
 /**
  * @author Stefano.Sabbadin
@@ -259,29 +248,28 @@ public interface BandiEsitiAvvisiDao {
 	 * "gare e contratti - procedure di acquisizione" previsto dall'articolo 1
 	 * della legge 190/2012 (Legge anticorruzione), filtrando per data
 	 * affidamento.
-	 * 
-	 * @param anno
-	 *            anno di riferimento
-	 * @param cig
-	 *            eventuale filtro sul cig
-	 * @param proponente
-	 *            eventuale filtro sul codice fiscale o denominazione del
-	 *            proponente
-     * @param proponente
-	 *            eventuale filtro sull'oggetto
-	 * @param oggetto
-	 *            eventuale filtro sull'oggetto 
-	 * @param partecipante
-	 *            eventuale filtro sul codice fiscale o denominazione del
-	 *            partecipante
-	 * @param aggiudicatario
-	 *            eventuale filtro sul codice fiscale o denominazione
-	 *            dell'aggiudicatario
+	 *
+	 * @param anno              anno di riferimento
+	 * @param cig               eventuale filtro sul cig
+	 * @param proponente        eventuale filtro sul codice fiscale o denominazione del
+	 *                          proponente
+	 * @param oggetto           eventuale filtro sull'oggetto
+	 * @param partecipante      eventuale filtro sul codice fiscale o denominazione del
+	 *                          partecipante
+	 * @param aggiudicatario    eventuale filtro sul codice fiscale o denominazione
+	 *                          dell'aggiudicatario
+	 * @param indicePrimoRecord
+	 * @param maxNumRecord
 	 * @return elenco degli appalti aggiudicati che rispettano i filtri in input
 	 */
 	List<AppaltoAggiudicatoAnticorruzione> getProspettoGareContrattiAnticorruzione(
 			int anno, String cig, String proponente,
-			String oggetto, 
+			String oggetto,
+			String partecipante, String aggiudicatario, int indicePrimoRecord, int maxNumRecord);
+
+	int countProspettoGareContrattiAnticorruzione(
+			int anno, String cig, String proponente,
+			String oggetto,
 			String partecipante, String aggiudicatario);
 
 	/**
@@ -364,7 +352,7 @@ public interface BandiEsitiAvvisiDao {
 	List<OperatoreInvitatoType> getOperatoriInvitatiContratto(String codice);
 
 	/**
-	 * Estrae l'elenco degli operatori raggruppati all'interno di una RTI, quando la RTI è stata invitata a partecipare a una gara
+	 * Estrae l'elenco degli operatori raggruppati all'interno di una RTI, quando la RTI ï¿½ stata invitata a partecipare a una gara
 	 * 
 	 * @param codiceRTI
 	 * 			codice del ragruppamento temporaneo di cui si desidera conoscere la composizione

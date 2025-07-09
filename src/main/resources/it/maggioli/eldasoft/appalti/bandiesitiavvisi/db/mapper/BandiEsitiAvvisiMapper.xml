@@ -276,7 +276,7 @@
     FROM v_ws_gare_ammaperta_doc
    WHERE codice = #{codice} 
      AND (dittaagg IS NULL OR dittaagg = #{codiceBeneficiario})
-     AND tipologia=90
+     AND (tipologia IN (90, 190))
      AND datpub IS NOT NULL
   </select>
   
@@ -285,29 +285,39 @@
     FROM v_ws_gare_ammaperta_doc
    WHERE codice = #{codice} 
      AND (dittaagg IS NULL OR dittaagg = #{codiceBeneficiario})
-     AND tipologia=90
+     AND (tipologia IN (90, 190))
      AND datpub IS NOT NULL
   </select>
   
   <select id="getProspettoGareContrattiAnticorruzione" parameterType="java.util.HashMap" resultMap="resultProspettoGareContrattiAnticorruzione">
   SELECT annorif, idanticorlotti, cig, codfiscprop, denomprop, oggetto, descsceltacontr, impaggiudic, datainizio, dataultimazione, impsommeliq 
     FROM v_ws_gare_anticor
-   WHERE annorif=#{anno}
-     <if test="cig != null and cig != ''">AND UPPER(cig) like #{cig}</if> 
-     <if test="proponente != null and proponente != ''">AND 
-     (UPPER(codfiscprop) like #{proponente} OR UPPER(denomprop) like #{proponente})
-     </if>
-     <if test="oggetto != null and oggetto != ''">AND (UPPER(oggetto) like #{oggetto}) </if>
-     <if test="partecipante != null and partecipante != ''">AND EXISTS (SELECT idanticorpartecip FROM v_ws_gare_anticor_ditte WHERE v_ws_gare_anticor_ditte.idanticorlotti = v_ws_gare_anticor.idanticorlotti AND (UPPER(ragsoc) like #{partecipante} OR UPPER(codfisc) like #{partecipante} OR UPPER(idfiscest) like #{partecipante})) </if>
-     <if test="aggiudicatario != null and aggiudicatario != ''">AND EXISTS (SELECT idanticorpartecip FROM v_ws_gare_anticor_ditte WHERE v_ws_gare_anticor_ditte.idanticorlotti = v_ws_gare_anticor.idanticorlotti AND aggiudicataria=1 AND (UPPER(ragsoc) like #{aggiudicatario} OR UPPER(codfisc) like #{aggiudicatario} OR UPPER(idfiscest) like #{aggiudicatario})) </if>
+  <include refid="whereProspettoGareContrattiAnticorruzione" />
    ORDER BY datainizio desc 
   </select>
+
+	<select id="countProspettoGareContrattiAnticorruzione" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM v_ws_gare_anticor
+		<include refid="whereProspettoGareContrattiAnticorruzione" />
+	</select>
+
+	<sql id="whereProspettoGareContrattiAnticorruzione">
+		WHERE annorif=#{anno}
+		<if test="cig != null and cig != ''">AND UPPER(cig) like #{cig}</if>
+		<if test="proponente != null and proponente != ''">AND
+			(UPPER(codfiscprop) like #{proponente} OR UPPER(denomprop) like #{proponente})
+		</if>
+		<if test="oggetto != null and oggetto != ''">AND (UPPER(oggetto) like #{oggetto}) </if>
+		<if test="partecipante != null and partecipante != ''">AND EXISTS (SELECT idanticorpartecip FROM v_ws_gare_anticor_ditte WHERE v_ws_gare_anticor_ditte.idanticorlotti = v_ws_gare_anticor.idanticorlotti AND (UPPER(ragsoc) like #{partecipante} OR UPPER(codfisc) like #{partecipante} OR UPPER(idfiscest) like #{partecipante})) </if>
+		<if test="aggiudicatario != null and aggiudicatario != ''">AND EXISTS (SELECT idanticorpartecip FROM v_ws_gare_anticor_ditte WHERE v_ws_gare_anticor_ditte.idanticorlotti = v_ws_gare_anticor.idanticorlotti AND aggiudicataria='1' AND (UPPER(ragsoc) like #{aggiudicatario} OR UPPER(codfisc) like #{aggiudicatario} OR UPPER(idfiscest) like #{aggiudicatario})) </if>
+	</sql>
 
   <select id="getDitteProspettoGareContrattiAnticorruzione" parameterType="java.util.HashMap" resultMap="resultDitteProspettoGareContrattiAnticorruzione">
   SELECT ragsoc, codfisc, idfiscest, descruolo 
     FROM v_ws_gare_anticor_ditte
    WHERE idanticorlotti = #{idLotto}
-     <if test="aggiudicataria != null and aggiudicataria != ''">AND aggiudicataria = 1</if>  
+     <if test="aggiudicataria != null and aggiudicataria != ''">AND aggiudicataria = '1'</if>
    ORDER BY idanticorpartecip asc, codruolo asc 
   </select>
 
@@ -403,7 +413,7 @@
     FROM v_ws_gare_ammaperta_doc
    WHERE codice = #{codice} 
      AND (dittaagg IS NULL OR dittaagg = #{codiceSoggetto})
-     AND tipologia=91
+     AND tipologia IN (91,191)
      AND datpub IS NOT NULL
   </select>
 
@@ -412,7 +422,7 @@
     FROM v_ws_gare_ammaperta_doc
    WHERE codice = #{codice} 
      AND (dittaagg IS NULL OR dittaagg = #{codiceSoggetto})
-     AND tipologia=91
+     AND tipologia IN (91,191)
      AND datpub IS NOT NULL
   </select>
   

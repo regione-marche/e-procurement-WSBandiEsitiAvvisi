@@ -7,13 +7,12 @@
 package it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws;
 
 
-import java.rmi.RemoteException;
-import java.util.Date;
-
 import it.maggioli.eldasoft.appalti.bandiesitiavvisi.bl.BandiEsitiAvvisiFacade;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
+import java.rmi.RemoteException;
+import java.util.Date;
 
 public class WSBandiEsitiAvvisiSOAPImpl extends SpringBeanAutowiringSupport implements it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.WSBandiEsitiAvvisi_PortType{
 
@@ -62,9 +61,9 @@ public class WSBandiEsitiAvvisiSOAPImpl extends SpringBeanAutowiringSupport impl
 	}
 
     public it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType getProspettoGareContrattiAnticorruzione(String token, int anno, String cig, String proponente,
-			String oggetto, String partecipante, String aggiudicatario) throws java.rmi.RemoteException {
+			String oggetto, String partecipante, String aggiudicatario, int indicePrimoRecord, int maxNumRecord) throws java.rmi.RemoteException {
 		return facade.getProspettoGareContrattiAnticorruzione(token,
-				anno, cig, proponente, oggetto, partecipante, aggiudicatario);
+				anno, cig, proponente, oggetto, partecipante, aggiudicatario, indicePrimoRecord, maxNumRecord);
     }
     
 	public it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.AdempimentoAnticorruzioneOutType getAdempimentiAnticorruzione(

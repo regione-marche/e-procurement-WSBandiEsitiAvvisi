@@ -4,6 +4,7 @@ import it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.vo.AppaltoAggiudicatoAnt
 import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.Date;
 import java.util.List;
@@ -75,7 +76,9 @@ public interface BandiEsitiAvvisiMapper {
 			, @Param("proponente") String proponente
 			, @Param("oggetto") String oggetto
 			, @Param("partecipante") String partecipante
-			, @Param("aggiudicatario") String aggiudicatario);
+			, @Param("aggiudicatario") String aggiudicatario
+		    , RowBounds bounds
+	);
 
 	public List<FileType> downloadDocumentiBeneficiario(
 			  @Param("codice") String codice
@@ -147,4 +150,12 @@ public interface BandiEsitiAvvisiMapper {
 			, @Param("codiceStazAppaltante") String codiceStazAppaltante
 			, @Param("cig") String cig);
 
+	int countProspettoGareContrattiAnticorruzione(
+			@Param("anno") Integer anno
+			, @Param("cig") String cig
+			, @Param("proponente") String proponente
+			, @Param("oggetto") String oggetto
+			, @Param("partecipante") String partecipante
+			, @Param("aggiudicatario") String aggiudicatario
+	);
 }

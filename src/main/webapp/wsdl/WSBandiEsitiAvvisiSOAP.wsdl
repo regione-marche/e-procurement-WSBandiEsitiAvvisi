@@ -349,39 +349,28 @@
 			
 			<xsd:complexType name="ProspettoContrattoType">
 				<xsd:sequence>
-					<xsd:element maxOccurs="1" minOccurs="1" name="cig"
-						type="xsd:string">
+					<xsd:element maxOccurs="1" minOccurs="1" name="cig" type="xsd:string">
 					</xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="strutturaProponenteCF" type="xsd:string">
+					<xsd:element maxOccurs="1" minOccurs="0" name="strutturaProponenteCF" type="xsd:string">
 					</xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="strutturaProponenteDenominazione" type="xsd:string">
+					<xsd:element maxOccurs="1" minOccurs="0" name="strutturaProponenteDenominazione" type="xsd:string">
 					</xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="oggetto" type="xsd:string">
+					<xsd:element maxOccurs="1" minOccurs="0" name="oggetto" type="xsd:string">
 					</xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="sceltaContraente" type="xsd:string">
+					<xsd:element maxOccurs="1" minOccurs="0" name="sceltaContraente" type="xsd:string">
 					</xsd:element>
-					<xsd:element maxOccurs="unbounded" minOccurs="0"
-						name="aggiudicatario" type="xsd:string">
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="aggiudicatario" type="xsd:string">
 					</xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="importoAggiudicazione" type="xsd:double">
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoAggiudicazione" type="xsd:double">
 					</xsd:element>
-					<xsd:element name="importoContratto" type="xsd:double" maxOccurs="1" minOccurs="0"></xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="dataInizio" type="xsd:date">
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoContratto" type="xsd:double"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="dataInizio" type="xsd:date">
 					</xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="dataUltimazione" type="xsd:date">
+					<xsd:element maxOccurs="1" minOccurs="0" name="dataUltimazione" type="xsd:date">
 					</xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="importoSommeLiquidate" type="xsd:double">
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoSommeLiquidate" type="xsd:double">
 					</xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="codice" type="xsd:string">
+					<xsd:element maxOccurs="1" minOccurs="0" name="codice" type="xsd:string">
 					</xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
@@ -395,31 +384,19 @@
 			
 			<xsd:complexType name="DettaglioContrattoType">
 				<xsd:sequence>
-					<xsd:element maxOccurs="1" minOccurs="1" name="cig"
-						type="xsd:string" />
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="strutturaProponenteCF" type="xsd:string" />
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="strutturaProponenteDenominazione" type="xsd:string" />
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="oggetto" type="xsd:string" />
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="sceltaContraente" type="xsd:string" />
-					<xsd:element maxOccurs="unbounded" minOccurs="0"
-						name="elencoOperatoriInvitati" type="tns:OperatoreInvitatoType" />
-					<xsd:element maxOccurs="unbounded" minOccurs="0"
-						name="aggiudicatario" type="tns:OperatoreInvitatoType" />
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="importoAggiudicazione" type="xsd:double" />
-					<xsd:element name="importoContratto" type="xsd:double" maxOccurs="1" minOccurs="0"></xsd:element>
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="dataInizio" type="xsd:date" />
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="dataUltimazione" type="xsd:date" />
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="importoSommeLiquidate" type="xsd:double" />
-					<xsd:element maxOccurs="1" minOccurs="0"
-						name="codice" type="xsd:string" />
+					<xsd:element maxOccurs="1" minOccurs="1" name="cig" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="strutturaProponenteCF" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="strutturaProponenteDenominazione" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="oggetto" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="sceltaContraente" type="xsd:string"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="elencoOperatoriInvitati" type="tns:OperatoreInvitatoType"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="aggiudicatario" type="tns:OperatoreInvitatoType"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoAggiudicazione" type="xsd:double"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoContratto" type="xsd:double"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="dataInizio" type="xsd:date"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="dataUltimazione" type="xsd:date"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="importoSommeLiquidate" type="xsd:double"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="codice" type="xsd:string"/>
 				</xsd:sequence>
 			</xsd:complexType>
 			
@@ -554,6 +531,10 @@
 						<xsd:element maxOccurs="1" minOccurs="0" name="partecipante" type="xsd:string">
 						</xsd:element>
 						<xsd:element maxOccurs="1" minOccurs="0" name="aggiudicatario" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="indicePrimoRecord" type="xsd:int">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="maxNumRecord" type="xsd:int">
 						</xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
@@ -1097,7 +1078,7 @@
 	</wsdl:binding>
 	<wsdl:service name="WSBandiEsitiAvvisi">
 		<wsdl:port binding="tns:WSBandiEsitiAvvisiSOAP" name="WSBandiEsitiAvvisiSOAP">
-			<soap:address location="http://localhost:8080/WebServiceProject/services/WSBandiEsitiAvvisiSOAP"/>
+			<soap:address location="http://localhost:8080/Prova1/services/WSBandiEsitiAvvisiSOAP"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

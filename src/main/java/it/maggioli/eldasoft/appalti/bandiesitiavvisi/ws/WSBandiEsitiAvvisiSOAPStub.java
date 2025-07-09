@@ -180,6 +180,10 @@ public class WSBandiEsitiAvvisiSOAPStub extends org.apache.axis.client.Stub impl
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "aggiudicatario"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         param.setOmittable(true);
         oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "indicePrimoRecord"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "maxNumRecord"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/", "ProspettoGareContrattiAnticorruzioneOutType"));
         oper.setReturnClass(it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "risultato"));
@@ -791,7 +795,7 @@ public class WSBandiEsitiAvvisiSOAPStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType getProspettoGareContrattiAnticorruzione(java.lang.String token, int anno, java.lang.String cig, java.lang.String proponente, java.lang.String oggetto, java.lang.String partecipante, java.lang.String aggiudicatario) throws java.rmi.RemoteException {
+    public it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType getProspettoGareContrattiAnticorruzione(java.lang.String token, int anno, java.lang.String cig, java.lang.String proponente, java.lang.String oggetto, java.lang.String partecipante, java.lang.String aggiudicatario, int indicePrimoRecord, int maxNumRecord) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -807,7 +811,7 @@ public class WSBandiEsitiAvvisiSOAPStub extends org.apache.axis.client.Stub impl
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {token, new java.lang.Integer(anno), cig, proponente, oggetto, partecipante, aggiudicatario});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {token, new java.lang.Integer(anno), cig, proponente, oggetto, partecipante, aggiudicatario, new java.lang.Integer(indicePrimoRecord), new java.lang.Integer(maxNumRecord)});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;

@@ -102,10 +102,10 @@ public class BandiEsitiAvvisiManager {
 	}
 
 	public List<AppaltoAggiudicatoAnticorruzioneType> getProspettoGareContrattiAnticorruzione(int anno, String cig,
-			String proponente, String oggetto, String partecipante, String aggiudicatario) {
+																							  String proponente, String oggetto, String partecipante, String aggiudicatario, int indicePrimoRecord, int maxNumRecord) {
 		List<AppaltoAggiudicatoAnticorruzioneType> risultato = new ArrayList<>();
 		List<AppaltoAggiudicatoAnticorruzione> lotti = this.bandiDao.getProspettoGareContrattiAnticorruzione(anno, cig,
-				proponente, oggetto, partecipante, aggiudicatario);
+				proponente, oggetto, partecipante, aggiudicatario, indicePrimoRecord, maxNumRecord);
 		for (AppaltoAggiudicatoAnticorruzione lotto : lotti) {
 			List<PartecipanteType> ditteInvitate = this.bandiDao
 					.getDitteProspettoGareContrattiAnticorruzione(lotto.getIdLotto(), false);
@@ -274,4 +274,7 @@ public class BandiEsitiAvvisiManager {
 		return this.bandiDao.downloadDocumentiConsulentiCollaboratori(codice, codiceSoggetto);
 	}
 
+	public int countProspettoGareContrattiAnticorruzione(int anno, String cig, String proponente, String oggetto, String partecipante, String aggiudicatario) {
+		return bandiDao.countProspettoGareContrattiAnticorruzione(anno, cig, proponente, oggetto, partecipante, aggiudicatario);
+	}
 }

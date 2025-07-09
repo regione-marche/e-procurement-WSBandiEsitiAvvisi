@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<Context path="/${nomeWebapp}">
+<Context>
 
 	<!-- [DATABASE] -->
 	<Resource name="jdbc/${nomeWebapp}"
@@ -47,7 +47,7 @@
 		auth="Container" 
 		type="javax.sql.DataSource" 
 		driverClassName="org.postgresql.Driver" 
-		url="jdbc:postgresql://localhost:5432/${nomeDB}" 
+		url="jdbc:postgresql://localhost:5432/${nomeDB}?stringtype=unspecified" 
 		username="${nomeDB}" 
 		password="${nomeDB}" 
 		defaultAutoCommit="false"

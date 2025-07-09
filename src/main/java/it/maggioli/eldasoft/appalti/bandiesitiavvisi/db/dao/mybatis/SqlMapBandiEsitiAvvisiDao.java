@@ -15,6 +15,7 @@ import it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.mapper.BandiEsitiAvvisiM
 import it.maggioli.eldasoft.appalti.bandiesitiavvisi.db.vo.AppaltoAggiudicatoAnticorruzione;
 import it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
@@ -153,8 +154,8 @@ public class SqlMapBandiEsitiAvvisiDao implements BandiEsitiAvvisiDao {
 	}
 	
 	public List<AppaltoAggiudicatoAnticorruzione> getProspettoGareContrattiAnticorruzione(
-			int anno, String cig, String proponente, 
-			String oggetto, String partecipante, String aggiudicatario) {
+			int anno, String cig, String proponente,
+			String oggetto, String partecipante, String aggiudicatario, int indicePrimoRecord, int maxNumRecord) {
 		//WE1158
 		if (StringUtils.isNotEmpty(cig))
 			cig = "%" + cig.toUpperCase() + "%";
@@ -173,7 +174,28 @@ public class SqlMapBandiEsitiAvvisiDao implements BandiEsitiAvvisiDao {
 				, proponente
 				, oggetto
 				, partecipante
-				, aggiudicatario);
+				, aggiudicatario
+				, getBounds((long) indicePrimoRecord, (long) maxNumRecord)
+		);
+	}
+
+	public int countProspettoGareContrattiAnticorruzione(
+			int anno, String cig, String proponente,
+			String oggetto,
+			String partecipante, String aggiudicatario
+	) {
+		if (StringUtils.isNotEmpty(cig))
+			cig = "%" + cig.toUpperCase() + "%";
+		if (StringUtils.isNotEmpty(proponente))
+			proponente = "%" + proponente.toUpperCase() + "%";
+		if (StringUtils.isNotEmpty(oggetto))
+			oggetto = "%" + oggetto.toUpperCase() + "%";
+		if (StringUtils.isNotEmpty(partecipante))
+			partecipante = "%" + partecipante.toUpperCase() + "%";
+		if (StringUtils.isNotEmpty(aggiudicatario))
+			aggiudicatario = "%" + aggiudicatario.toUpperCase() + "%";
+
+		return bandiMapper.countProspettoGareContrattiAnticorruzione(anno, cig, proponente, oggetto, partecipante, aggiudicatario);
 	}
 	
 	public List<PartecipanteType> getDitteProspettoGareContrattiAnticorruzione(
@@ -288,6 +310,13 @@ public class SqlMapBandiEsitiAvvisiDao implements BandiEsitiAvvisiDao {
 	private Date addDayToCalendarAndGetDate(GregorianCalendar calendar, int days) {
 		calendar.add(Calendar.DATE, days);
 		return new Date(calendar.getTimeInMillis());
+	}
+
+	public RowBounds getBounds(Long indicePrimoRecord, Long maxNumRecord) {
+		return new RowBounds(
+				indicePrimoRecord == null ? 0 : indicePrimoRecord.intValue()
+				, maxNumRecord == null || maxNumRecord == 0L ? Integer.MAX_VALUE : maxNumRecord.intValue()
+		);
 	}
 	
 }

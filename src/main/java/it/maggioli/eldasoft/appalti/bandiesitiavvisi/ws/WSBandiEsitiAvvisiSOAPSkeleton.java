@@ -131,6 +131,8 @@ public class WSBandiEsitiAvvisiSOAPSkeleton implements it.maggioli.eldasoft.appa
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "oggetto"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "partecipante"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "aggiudicatario"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "indicePrimoRecord"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false), 
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "maxNumRecord"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false), 
         };
         _oper = new org.apache.axis.description.OperationDesc("getProspettoGareContrattiAnticorruzione", _params, new javax.xml.namespace.QName("", "risultato"));
         _oper.setReturnType(new javax.xml.namespace.QName("http://www.eldasoft.it/appalti/WSBandiEsitiAvvisi/", "ProspettoGareContrattiAnticorruzioneOutType"));
@@ -276,9 +278,9 @@ public class WSBandiEsitiAvvisiSOAPSkeleton implements it.maggioli.eldasoft.appa
         return ret;
     }
 
-    public it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType getProspettoGareContrattiAnticorruzione(java.lang.String token, int anno, java.lang.String cig, java.lang.String proponente, java.lang.String oggetto, java.lang.String partecipante, java.lang.String aggiudicatario) throws java.rmi.RemoteException
+    public it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType getProspettoGareContrattiAnticorruzione(java.lang.String token, int anno, java.lang.String cig, java.lang.String proponente, java.lang.String oggetto, java.lang.String partecipante, java.lang.String aggiudicatario, int indicePrimoRecord, int maxNumRecord) throws java.rmi.RemoteException
     {
-        it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType ret = impl.getProspettoGareContrattiAnticorruzione(token, anno, cig, proponente, oggetto, partecipante, aggiudicatario);
+        it.maggioli.eldasoft.appalti.bandiesitiavvisi.ws.ProspettoGareContrattiAnticorruzioneOutType ret = impl.getProspettoGareContrattiAnticorruzione(token, anno, cig, proponente, oggetto, partecipante, aggiudicatario, indicePrimoRecord, maxNumRecord);
         return ret;
     }
 

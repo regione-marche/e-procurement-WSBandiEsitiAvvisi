@@ -22,7 +22,7 @@ public class WSBandiEsitiAvvisi_ServiceLocator extends org.apache.axis.client.Se
     }
 
     // Use to get a proxy class for WSBandiEsitiAvvisiSOAP
-    private java.lang.String WSBandiEsitiAvvisiSOAP_address = "http://localhost:8080/AliceWSBandiEsitiAvvisi/services/WSBandiEsitiAvvisiSOAP";
+    private java.lang.String WSBandiEsitiAvvisiSOAP_address = "http://localhost:8080/WebServiceProject/services/WSBandiEsitiAvvisiSOAP";
 
     public java.lang.String getWSBandiEsitiAvvisiSOAPAddress() {
         return WSBandiEsitiAvvisiSOAP_address;

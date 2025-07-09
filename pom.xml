@@ -10,7 +10,7 @@
 
 	<groupId>it.maggioli.eldasoft.sil</groupId>
 	<artifactId>wsbea</artifactId>
-	<version>1.11.2</version>
+	<version>1.13.1</version>
 	<packaging>war</packaging>
 	<organization>
 		<name>Maggioli S.p.A.</name>
@@ -155,7 +155,6 @@
 		<profile>
 			<id>env-dev</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
 				<property>
 					<!-- Activate: mvn -Denv=dev <phase> -->
 					<name>env</name>
@@ -172,6 +171,7 @@
 		<profile>
 			<id>env-prod</id>
 			<activation>
+				<activeByDefault>true</activeByDefault>
 				<property>
 					<!-- Activate: mvn -Denv=prod <phase> -->
 					<name>env</name>

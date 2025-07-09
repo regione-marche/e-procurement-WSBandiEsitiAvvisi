@@ -174,19 +174,19 @@
   </sql>
   
   <sql id="whereBandiInCorso">
-   WHERE ((tipo IN ('Bando','Avviso') AND dtpubblicazione &lt;= #{dataAttuale} <if test="dataPubblicazioneConDelta != null and dataPubblicazioneConDelta != ''">AND dtpubblicazione &gt; #{dataPubblicazioneConDelta}</if> AND (dtscadenzabando &gt;= #{dataAttuale} OR dtscadenzabando is null)) OR (tipo = 'Esito' AND (dtpubblicazione is null OR dtpubblicazione &lt;= #{dataAttuale}) AND dtscadenzaesito &gt;= #{dataScadenzaEsito}))
+   WHERE ((tipo IN ('Bando','Avviso') AND dtpubblicazione &lt;= #{dataAttuale} <if test="dataPubblicazioneConDelta != null">AND dtpubblicazione &gt; #{dataPubblicazioneConDelta}</if> AND (dtscadenzabando &gt;= #{dataAttuale} OR dtscadenzabando is null)) OR (tipo = 'Esito' AND (dtpubblicazione is null OR dtpubblicazione &lt;= #{dataAttuale}) AND dtscadenzaesito &gt;= #{dataScadenzaEsito}))
   </sql>
 
   <sql id="whereBandiScaduti">
-   WHERE (tipo IN ('Bando','Avviso') AND dtscadenzabando &lt; #{dataAttuale} <if test="dataScadenza != null and dataScadenza != ''">AND dtscadenzabando &gt; #{dataScadenza}</if>) AND ((tipo = 'Bando' AND (dtscadenzaesito &gt;= #{dataAttuale} OR dtscadenzaesito is null)) OR (tipo = 'Avviso' AND (dtscadenzaavviso &gt;= #{dataAttuale} OR dtscadenzaavviso is null)))
+   WHERE (tipo IN ('Bando','Avviso') AND dtscadenzabando &lt; #{dataAttuale} <if test="dataScadenza != null">AND dtscadenzabando &gt; #{dataScadenza}</if>) AND ((tipo = 'Bando' AND (dtscadenzaesito &gt;= #{dataAttuale} OR dtscadenzaesito is null)) OR (tipo = 'Avviso' AND (dtscadenzaavviso &gt;= #{dataAttuale} OR dtscadenzaavviso is null)))
   </sql>
   
   <sql id="filtriInputRicerche">
      AND (islotto IS NULL OR islotto = 0) 
      <if test="tipo != null and tipo != ''">AND tipo = #{tipo}</if> 
      <if test="contratto != null and contratto != ''">AND tipocontratto = #{contratto}</if>
-     <if test="dataPubblicazioneDa != null and dataPubblicazioneDa != ''">AND dtpubblicazione &gt;= #{dataPubblicazioneDa}</if> 
-     <if test="dataPubblicazioneA != null and dataPubblicazioneA != ''">AND dtpubblicazione &lt;= #{dataPubblicazioneA}</if> 
+     <if test="dataPubblicazioneDa != null">AND dtpubblicazione &gt;= #{dataPubblicazioneDa}</if>
+     <if test="dataPubblicazioneA != null">AND dtpubblicazione &lt;= #{dataPubblicazioneA}</if>
      <if test="codiceStazAppaltante != null and codiceStazAppaltante != ''">AND 
      (codicefiscaleente = #{codiceStazAppaltante} 
       OR EXISTS (SELECT cenint FROM v_ws_aderente_lotto al WHERE v_ws_gare_tabinf.codicecig = al.codcig AND al.cfein = #{codiceStazAppaltante}))
@@ -203,8 +203,8 @@
   WHERE 1=1
   	<if test="stazioneAppaltante != null and stazioneAppaltante != ''">AND codsa = #{stazioneAppaltante}</if>
     <if test="soggettoPercettore != null and soggettoPercettore != ''">AND UPPER(soggettopercettore) like #{soggettoPercettore}</if> 
-    <if test="dataDa != null and dataDa != ''">AND data &gt;= #{dataDa} </if> 
-    <if test="dataA != null and dataA != ''">AND data &lt;= #{dataA} </if>
+    <if test="dataDa != null">AND data &gt;= #{dataDa} </if>
+    <if test="dataA != null">AND data &lt;= #{dataA} </if>
     <if test="ragioneIncarico != null and ragioneIncarico != ''">AND UPPER(ragioneincarico) like #{ragioneIncarico}</if>
     <if test="compensoPrevistoDa != null and compensoPrevistoDa != ''">AND compensoprevisto &gt;= #{compensoPrevistoDa}</if>
     <if test="compensoPrevistoA != null and compensoPrevistoA != ''">AND compensoprevisto &lt;= #{compensoPrevistoA}</if>
@@ -266,8 +266,8 @@
   SELECT codice, codciglotto, oggetto, codbeneficiario, beneficiario, cfpi, importo, data_affidamento, norma, ufficio, responsabile_proc, modalita 
     FROM v_ws_gare_ammaperta
    WHERE 1=1
-     <if test="dataAffidamentoDa != null and dataAffidamentoDa != ''">AND data_affidamento &gt;= #{dataAffidamentoDa}</if> 
-     <if test="dataAffidamentoA != null and dataAffidamentoA != ''">AND data_affidamento &lt;= #{dataAffidamentoA}</if> 
+     <if test="dataAffidamentoDa != null">AND data_affidamento &gt;= #{dataAffidamentoDa}</if>
+     <if test="dataAffidamentoA != null">AND data_affidamento &lt;= #{dataAffidamentoA}</if>
    ORDER BY data_affidamento desc 
   </select>
   
@@ -299,7 +299,7 @@
      </if>
      <if test="oggetto != null and oggetto != ''">AND (UPPER(oggetto) like #{oggetto}) </if>
      <if test="partecipante != null and partecipante != ''">AND EXISTS (SELECT idanticorpartecip FROM v_ws_gare_anticor_ditte WHERE v_ws_gare_anticor_ditte.idanticorlotti = v_ws_gare_anticor.idanticorlotti AND (UPPER(ragsoc) like #{partecipante} OR UPPER(codfisc) like #{partecipante} OR UPPER(idfiscest) like #{partecipante})) </if>
-     <if test="aggiudicatario != null and aggiudicatario != ''">AND EXISTS (SELECT idanticorpartecip FROM v_ws_gare_anticor_ditte WHERE v_ws_gare_anticor_ditte.idanticorlotti = v_ws_gare_anticor.idanticorlotti AND aggiudicataria=1 AND (UPPER(ragsoc) like #{aggiudicatario} OR UPPER(codfisc) like #{aggiudicatario} OR UPPER(idfiscest) like #{aggiudicatario})) </if>
+     <if test="aggiudicatario != null and aggiudicatario != ''">AND EXISTS (SELECT idanticorpartecip FROM v_ws_gare_anticor_ditte WHERE v_ws_gare_anticor_ditte.idanticorlotti = v_ws_gare_anticor.idanticorlotti AND aggiudicataria='1' AND (UPPER(ragsoc) like #{aggiudicatario} OR UPPER(codfisc) like #{aggiudicatario} OR UPPER(idfiscest) like #{aggiudicatario})) </if>
    ORDER BY datainizio desc 
   </select>
 
@@ -342,8 +342,8 @@
     	((singolaaggiudicataria=1 AND (UPPER(descaggiudicataria) like #{aggiudicatario} OR UPPER(codfiscaggiudicataria) like #{aggiudicatario} OR UPPER(partivaaggiudicataria) like #{aggiudicatario}))
 	 OR (singolaaggiudicataria=0 AND EXISTS(SELECT ditta FROM v_ws_gare_n_aggiudicatari aggaq WHERE aggaq.codice = v_ws_trasp_contratti.codice AND (UPPER(ragsoc) like #{aggiudicatario} OR UPPER(codfisc) like #{aggiudicatario} OR UPPER(partiva) like #{aggiudicatario}))))
 	</if>
-  	<if test="dataPubblicazioneEsitoDa != null and dataPubblicazioneEsitoDa != ''">AND  datapubbesito &gt;= #{dataPubblicazioneEsitoDa} </if>
-  	<if test="dataPubblicazioneEsitoA != null and dataPubblicazioneEsitoA != ''">AND  datapubbesito &lt;= #{dataPubblicazioneEsitoA}  </if>
+  	<if test="dataPubblicazioneEsitoDa != null">AND  datapubbesito &gt;= #{dataPubblicazioneEsitoDa} </if>
+  	<if test="dataPubblicazioneEsitoA != null">AND  datapubbesito &lt;= #{dataPubblicazioneEsitoA}  </if>
   </select>
   
   <select id="getInfoContratto" parameterType="java.util.HashMap" resultMap="resultProspettoContratti">
